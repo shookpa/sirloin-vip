@@ -25,7 +25,11 @@ class UtilsVIP {
 			return false;
 	}
 	static function validateNumVIPSold($numVip) {
-
+// 		echo "SELECT * FROM fact_vip WHERE descrip='" . $numVip . "'" ;
+		$numReg = num_regmysql ( "SELECT * FROM fact_vip WHERE descrip='" . $numVip . "'" );
+		if ($numReg > 0)
+			return true;
+		else
 			return false;
 	}
 	
@@ -37,6 +41,10 @@ class UtilsVIP {
 				return null;
 	}
 	static function getDataInvoiceSold($numVip) {
+		$rsd = traedatosmysql ( "SELECT id_restaurante,fecha,totalf FROM fact_vip WHERE descrip='" . $numVip . "'" );
+		if (! $rsd->EOF)
+			return $rsd->fields;
+		else
 			return null;
 	}
 	static function getDataByUser($user) {

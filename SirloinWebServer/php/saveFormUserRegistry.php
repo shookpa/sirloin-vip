@@ -95,9 +95,9 @@ if ($encontrada>0) {
 }
 else 
 {
-
-	
-	$vendida=false;
+// 	echo "EN EL ELSE";
+	$vendida= UtilsVIP::validateNumVIPSold($numVip);
+// 	echo "<h1>El numero VIP de la tarjeta  ".$arrayDatosInsertar["user"]." es $numVip y fue encontrada: $encontrada</h1>";
 	if ($vendida>0) {
 		//SI ESTA ENCONTRADA, DEBEMOS VALIDAR QUE NO EXISTA ESTA TARJETA DADA DE ALTA
 		$duplicada= UtilsVIP::validateUserByNumVIP($numVip);
@@ -131,14 +131,44 @@ else
 		".$arrayDatosInsertar["dia_nac"].", ".$arrayDatosInsertar["mes_nac"].", ".$arrayDatosInsertar["year_nac"].", ".$arrayDatosInsertar["genero"].", 2, '1' )";
 		traedatosmysql($sql);
 		//COMO ESTA TARJETA FUE RECIEN VENDIDA, DEBE AGREGAR REGISTRO EN clientes_vip CON UN SALDO INICIAL:
+		$datosFactura=UtilsVIP::getDataInvoiceSold($numVip);//AQUI OBTENEMOS LOS DATOS DE LA FACTURA,
+		$cliente=array ('num_vip' => $numVip,
+				'nom_vip'=>$arrayDatosInsertar["nombre"]. " ".$arrayDatosInsertar["a_paterno"]." ".$arrayDatosInsertar["a_materno"],
+				'tel_vip' => $arrayDatosInsertar["telefono"],
+				'ema_vip' => $arrayDatosInsertar["email"],
+				'fec_vip' => $datosFactura["fecha"],
+				'sal_vip' => "0.0",
+// 				'fuc_vip' =>"algo",
+				"muc_vip"=> "0.0",
+// 				"fup_vip"=> "algo",
+				"mup_vip"=> "0.0",
+				"tnr_vip"=> "0.0",
+				"tmr_vip"=> "0.0",
+				"tct_vip"=> "0.0",
+				"pto_vip"=> $datosFactura["totalf"], // DEBE TOMAR EL TOTAL DE LA FACTURA (PORQUE HAY TARJETAS DE REGALO CON SALDO PRECARGADO)
+				"pva_vip"=> "10",
+				'datetime_vip'=>date("Y-m-d H:i:s"),
+				
+		);
+		$cliente["id_restaurante"]=$datosFactura["id_restaurante"];
+		InsertTable('clientes_vip', $cliente,true);
+		InsertTable('clientes_rest1', $cliente,true);
+		InsertTable('clientes_rest2', $cliente,true);
+		InsertTable('clientes_rest3', $cliente,true);
+		InsertTable('clientes_rest4', $cliente,true);
+		InsertTable('clientes_rest5', $cliente,true);
+		InsertTable('clientes_rest6', $cliente,true);
+		$id_rest=$datosFactura["id_restaurante"];
+		//Aparte de insertar el saldo, debe generar un movimiento de la tarjeta nueva comprada:
+		createMovement($id_rest,$datosFactura["totalf"], $numVip,"Activacion de tarjeta en sistema web");
+		//QUE ENVIE EL CORREO DE BIENVENIDA:
+		sendWelcomeEmail($arrayDatosInsertar["nombre"]. " ".$arrayDatosInsertar["a_paterno"]." ".$arrayDatosInsertar["a_materno"], $arrayDatosInsertar["email"], $datosFactura["totalf"]);
 		
-		//FUNCIONALIDAD DESACTIVADA
 		
 	}
 	else 
 	{
-		sendIndividualEmail("webmaster@soft-webcosmos.com.mx", "<html><body><h1>Funcionalidad de facturas VIP desactivada, tarjeta: <b>".$numVip."</b></h1></body></html>", "Funcionalidad de facturas desactivada");
-		echo '{"success":false, "mensaje":"Verifique su ticket de compra o acuda al restaurante más cercano (Funcionalidad de registro de tarjetas recien compradas desactivada)"}';		
+		echo '{"success":false, "mensaje":"Verifique su ticket de compra o acuda al restaurante más cercano"}';
 		exit;
 	}
 }

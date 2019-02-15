@@ -254,8 +254,29 @@ function agregarMovimientos($cuenta, $listaMovs) {
 	}
 }
 function agregarFacturas($cuenta, $listaFacts) {
-	if (autenticaUsuario($cuenta["usuario"], $cuenta["password"] )) {		
-		return 'Funcionalidad de registro de Facturas Desactivada por falta de pago' ;		
+	if (autenticaUsuario($cuenta["usuario"], $cuenta["password"] )) {
+		$cont=0;
+		$id_rest=str_replace("rest", "", $cuenta["usuario"]);
+		foreach ($listaFacts as $fac) {
+			$fac["id_restaurante"]=$id_rest;
+			$rsdCliAct=traedatosmysql("SELECT * FROM fact_vip WHERE id_restaurante ='".$id_rest."' AND orden ='".$fac["orden"]."' AND factura ='".$fac["factura"]."'");
+			if (!($rsdCliAct->RecordCount()>0)) //EN EL CASO DE QUE NO HAYA ESOS REGISTROS, DEBE HACER EL INSERT EN LA TABLA DE FACTURAS VIP
+			{
+				
+// 				$sqlInsert="INSERT INTO fact_vip ( id_restaurante, fecha, descrip, orden, factura, numero) VALUES
+// 							('".$id_rest."', '".$fac["num_vip"]."',  '".$fac["doc_vip"]."', '".$fac["fec_vip"]."',  '".$fac["mon_vip"]."', '".$fac["caj_vip"]."', '".$fac["det_vip"]."', '".$fac["pto_vip"]."' )";
+				// 				traedatosmysql($sqlInsert);
+				InsertTable('fact_vip', $fac);
+			}
+			else 
+			{
+				//en el caso de que si exista el registro de factura, debe hacer la actualizacion de la descripcion:
+				traedatosmysql("UPDATE fact_vip SET descrip= '".$fac["descrip"]."' WHERE id_restaurante ='".$id_rest."' AND orden ='".$fac["orden"]."' AND factura ='".$fac["factura"]."'");
+			}
+			$cont++;
+		}
+		return 'Se sincronizaron '.$cont .' facturas ' ;
+		
 	} else {
 		return new soap_fault ( 'SOAP-ENV:Server', '', 'Error en credenciales', '' );
 	}
