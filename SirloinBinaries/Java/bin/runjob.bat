@@ -1,0 +1,1 @@
+START /SHARED /HIGH /WAIT C:\SirloinToDeploy\SirloinToDeploy\CommonFiles\Java\bin\java.exe -jar Sirloin_v7.2.jar 2
