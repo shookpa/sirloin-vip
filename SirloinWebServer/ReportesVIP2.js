@@ -97,7 +97,7 @@ Ext.define('Writer.Grid', {
 					type : 'textfield'
 				}
 			}, {
-				header : 'Fecha activacion tarjeta',
+				header : 'Fecha compra tarjeta',
 				width : 120,
 				sortable : true,
 				dataIndex : 'fec_vip',
