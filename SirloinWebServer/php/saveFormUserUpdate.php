@@ -29,10 +29,14 @@ $arrayDatosInsertar = $arrayDatosInsertar2;
 	if($datosActuales["password"]!=$arrayDatosInsertar["password"])
 		$actualizaPwd=" password=PASSWORD('".$arrayDatosInsertar["password"]."'), ";
 	
-	$sql="UPDATE usuarios SET NOMBRE = '".$arrayDatosInsertar["nombre"]."', A_PATERNO = '".$arrayDatosInsertar["a_paterno"]."', A_MATERNO=  '".$arrayDatosInsertar["a_materno"]."', $actualizaPwd  EMAIL='".$arrayDatosInsertar["email"]."', 
-		TELEFONO='".$arrayDatosInsertar["telefono"]."', CP='".$arrayDatosInsertar["cp"]."', DIA_NAC=".$arrayDatosInsertar["dia_nac"].", MES_NAC=".$arrayDatosInsertar["mes_nac"].", YEAR_NAC=".$arrayDatosInsertar["year_nac"].", 
+	$sql="UPDATE usuarios SET NOMBRE = '".$arrayDatosInsertar["nombre"]."', A_PATERNO = '".$arrayDatosInsertar["a_paterno"]."', 
+		A_MATERNO=  '".$arrayDatosInsertar["a_materno"]."', $actualizaPwd  EMAIL='".$arrayDatosInsertar["email"]."', 
+		TELEFONO='".$arrayDatosInsertar["telefono"]."', CP='".$arrayDatosInsertar["cp"]."', DIA_NAC=".$arrayDatosInsertar["dia_nac"].", 
+		MES_NAC=".$arrayDatosInsertar["mes_nac"].", YEAR_NAC=".$arrayDatosInsertar["year_nac"].", 
 		GENERO=".$arrayDatosInsertar["genero"]." WHERE user ='".$arrayDatosInsertar["user"]."'";
+	
 	traedatosmysql($sql);
-
+	
+	
 echo '{"success":true, "mensaje":"La modificacion de los datos fue exitosa"}';
 ?>

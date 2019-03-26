@@ -13,7 +13,7 @@ foreach ( $arrayDatosInsertar [0] as $key => $value ) {
 $arrayDatosInsertar = $arrayDatosInsertar2;
 $arrayDatosInsertar["status"]=1;
 	InsertTable('cat_roles', $arrayDatosInsertar,true);
-	$idGenerado=mysql_insert_id();
+	$idGenerado=mysqli_insert_id();
 	
 echo '{"success":true, "mensaje":"El registro del rol fue exitoso"}';
 ?>

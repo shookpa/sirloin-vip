@@ -12,7 +12,7 @@ class Usuario extends Model {
 	static function find($id) {
 		global $dbh;
 		$found = null;
-		foreach ( $dbh->rs ( "tarifaBaseIntegra", "id_tarifa" ) as $rec ) {
+		foreach ( $dbh->rs ( "usuarios", "id" ) as $rec ) {
 			if ($rec ['id'] == $id) {
 				$found = new self ( $rec );
 				break;
@@ -27,14 +27,14 @@ class Usuario extends Model {
 		if ($rec == null) {
 			return $rec;
 		}
-		$rs = $dbh->rs ( "tarifaBaseIntegra", "id_tarifa" );
+		$rs = $dbh->rs ( "usuarios", "id" );
 		
 		foreach ( $rs as $idx => $row ) {
 			if ($row ['id'] == $id) {
 				$rec->attributes = array_merge ( $rec->attributes, get_object_vars ( $params ) );
-				$rec->attributes ["id_tarifa"] = $id;
+				$rec->attributes ["id"] = $id;
 				// var_dump($rec->attributes);
-				$dbh->update ( "tarifaBaseIntegra", $rec->attributes, "id_tarifa" );
+				$dbh->update ( "usuarios", $rec->attributes, "id" );
 				break;
 			}
 		}
@@ -43,10 +43,10 @@ class Usuario extends Model {
 	static function destroy($id) {
 		global $dbh;
 		$rec = null;
-		$rs = $dbh->rs ( "tarifaBaseIntegra", "id_tarifa" );
+		$rs = $dbh->rs ( "usuarios", "id" );
 		foreach ( $rs as $idx => $row ) {
 			if ($row ['id'] == $id) {
-				$rec = new self ( $dbh->destroy ( "tarifaBaseIntegra", "id_tarifa", $id ) );
+				$rec = new self ( $dbh->destroy ( "usuarios", "id", $id ) );
 				break;
 			}
 		}
@@ -59,10 +59,13 @@ class Usuario extends Model {
 		 * FROM 
 		 */
 		
-		return $dbh->rs ( "usuarios INNER JOIN cat_tipos_usuario tipo ON tipo.id = usuarios.tipoUser  WHERE usuarios.status=1 AND usuarios.tipoUser <>2", 
+		return $dbh->rs ( "usuarios INNER JOIN cat_tipos_usuario tipo ON tipo.id = usuarios.tipoUser
+							LEFT JOIN  cat_roles ON id_rol=rol_user
+						WHERE usuarios.status=1 AND usuarios.tipoUser <>2", 
 				"id", 
 				"usuarios.id,nombre, a_paterno, a_materno, user, num_vip, password, email, telefono, cp,id_empresa, rol_user,
-				CONCAT(year_nac,'-', IF(mes_nac<10,CONCAT('0',mes_nac),mes_nac),'-', IF(dia_nac<10,CONCAT('0',dia_nac),dia_nac) ) AS fecha_nac, genero, tipoUser, tipo.descripcion AS descTipo" );
+				CONCAT(year_nac,'-', IF(mes_nac<10,CONCAT('0',mes_nac),mes_nac),'-', IF(dia_nac<10,CONCAT('0',dia_nac),dia_nac) ) AS fecha_nac, genero, tipoUser, 
+				IF(usuarios.tipoUser=1, tipo.descripcion, cat_roles.nombre_rol) AS descTipo" );
 	}
 	static function searchUsuarios($params) {
 		global $dbh;
@@ -143,7 +146,7 @@ class Usuario extends Model {
 	}
 	public function save() {
 		global $dbh;
-		$dbh->insert ( $this->attributes, "tarifaBaseIntegra" );
+		$dbh->insert ( $this->attributes, "usuarios" );
 	}
 	public function to_hash() {
 		return $this->attributes;

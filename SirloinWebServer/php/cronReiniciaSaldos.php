@@ -19,11 +19,11 @@ $body= '<html><head><title>Saldo Vencido</title></head><body><h1>
 			<p><a href="'.$archivoExcel.'" >Lista de tarjetas VIP</a></p>		
 			</h1></body></html>';
 $subject="Vencimiento de tarjetas VIP";
-sendEmail($rcptAdmin, $body, $subject);
+// sendEmail($rcptAdmin, $body, $subject);
 //REINICIANDO LOS SALDOS A CERO
-$sqlUpdate="UPDATE clientes_vip SET pto_vip=0, datetime_vip=NOW()";
+$sqlUpdate="UPDATE clientes_vip SET pto_vip=0, datetime_vip=NOW() WHERE  pto_vip<>0 AND  (num_vip NOT IN (SELECT num_vip FROM mov_vip WHERE det_vip='Activacion de tarjeta en sistema web') OR num_vip IN (SELECT num_vip FROM mov_vip WHERE det_vip='Activacion de tarjeta en sistema web' AND mon_vip<=50) )   ";
 traedatosmysql($sqlUpdate);
-$sqlCorreos="SELECT ema_vip, nom_vip FROM clientes_vip WHERE ema_vip<>''";
+$sqlCorreos="SELECT ema_vip, nom_vip FROM clientes_vip WHERE ema_vip<>'' AND  (num_vip NOT IN (SELECT num_vip FROM mov_vip WHERE det_vip='Activacion de tarjeta en sistema web') OR num_vip IN (SELECT num_vip FROM mov_vip WHERE det_vip='Activacion de tarjeta en sistema web' AND mon_vip<=50) )  ";
 $rsdCorreos=traedatosmysql($sqlCorreos);
 $rcpt[0]["name"]="Webmaster";
 $rcpt[0]["email"]="mr_shookp@hotmail.com";
@@ -38,14 +38,14 @@ while (!$rsdCorreos->EOF)
 echo "La lista de correos de los clientes:\n\r";
 var_dump($rcpt);
 
-$rcpt = array (
-		array (
-				'name' => 'Jorge Centeno',
-				'email' => 'jorge.centeno@cc-datweb.com.mx'
-		)
-);
+// $rcpt = array (
+// 		array (
+// 				'name' => 'Jorge Centeno',
+// 				'email' => 'jorge.centeno@cc-datweb.com.mx'
+// 		)
+// );
 
-var_dump($rcpt);
+// var_dump($rcpt);
 $body= '<html><head><title>Saldo Vencido</title></head><body><h1>
 			<p>Buen d&iacute;a estimado cliente</p><p>Para informarle que de acuerdo a nuestras pol&iacute;ticas de vencimiento de puntos, el saldo de su tarjeta quedo en ceros.</p>
 			<p>Sin embargo, la podr&aacute; seguir utilizando en sus consumos y as&iacute; seguir acumulando puntos para pagar en cualquiera de nuestras sucursales.</p><p><br></p>

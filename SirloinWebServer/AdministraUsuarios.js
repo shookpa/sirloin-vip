@@ -14,15 +14,17 @@ Ext.define('CustomCheckbox', {
         }
         arCols=this.dataIndex.split("_");
         columna= eval("meta.record.data."+arCols[1]);
-//        console.debug("Veamos que trae la columna",columna);//.down(arCols[1]) .down("lbl_modulo") 
-        //DEPENDIENDO SI HAY FUNCIONALIDAD EN EL QUE ESTAMOS, LE PONEMOS O NO LE PONEMOS CHECK:
+// console.debug("Veamos que trae la columna",columna);//.down(arCols[1])
+// .down("lbl_modulo")
+        // DEPENDIENDO SI HAY FUNCIONALIDAD EN EL QUE ESTAMOS, LE PONEMOS O NO
+		// LE PONEMOS CHECK:
         if(columna.trim()=="")
         	return '';
         else        	
         	return '<img class="' + cls.join(' ') + '" src="' + Ext.BLANK_IMAGE_URL + '"/>';
     }
 });
-//GUARDAMOS EN UN OBJETO LOS PERMISOS GUARDADOS EN EL sessionStorage:
+// GUARDAMOS EN UN OBJETO LOS PERMISOS GUARDADOS EN EL sessionStorage:
 var perm= JSON.parse(sessionStorage.permisos);
 Ext.define('MyDesktop.AdministraUsuarios',
 				{
@@ -96,8 +98,7 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																					text : 'Modificar Usuario',
 																					disabled: perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func8 == "1"),
 																					itemId : 'editUser',
-																					scope : this,
-																					disabled:true,
+																					scope : this,																					
 																					handler : this.onEditUserClick
 																				},
 																				{
@@ -105,8 +106,7 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																					text : 'Eliminar Usuario',
 																					disabled: perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func9 == "1"),
 																					itemId : 'deleteUser',
-																					scope : this,
-																					disabled:true,
+																					scope : this,																					
 																					handler : this.onDeleteUserClick
 																				} ]
 																	}],
@@ -529,10 +529,10 @@ Ext.define('MyDesktop.AdministraUsuarios',
 									model : 'Writer.Permisos',
 									autoLoad : true,
 
-//									sorters : [ {
-//										property : 'id',
-//										direction : 'DESC'
-//									} ],
+// sorters : [ {
+// property : 'id',
+// direction : 'DESC'
+// } ],
 									autoSync : true,
 									autoScroll : true,
 									proxy : {
@@ -602,30 +602,32 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																					scope : this,																					
 																					handler : this.onNewRolClick
 																				},
-//																				{
-//																					iconCls : 'edit',
-//																					text : 'Modificar Permisos',
-//																					itemId : 'modifPermisos',
-//																					scope : this,
-//																					disabled:true,
-//																					handler : this.onModifPermClick
-//																				},
+// {
+// iconCls : 'edit',
+// text : 'Modificar Permisos',
+// itemId : 'modifPermisos',
+// scope : this,
+// disabled:true,
+// handler : this.onModifPermClick
+// },
 																				{
 																					iconCls : 'edit',
 																					text : 'Modificar Rol',
-																					disabled: perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func11 == "1"),
+// disabled: perm!=null && !perm.some(item => item.id_permiso == '1' &&
+// item.per_func11 == "1"),
+																					disabled: true,
 																					itemId : 'editRol',
-																					scope : this,
-																					disabled:true,
+																					scope : this,																					
 																					handler : this.onEditRolClick
 																				},
 																				{
 																					iconCls : 'remove',
 																					text : 'Eliminar Rol',
-																					disabled: perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func12 == "1"),
+// disabled: perm!=null && !perm.some(item => item.id_permiso == '1' &&
+// item.per_func12 == "1"),
+																					disabled: true,
 																					itemId : 'deleteRol',
-																					scope : this,
-																					disabled:true,
+																					scope : this,																				
 																					handler : this.onDeleteRolClick
 																				} ]
 																	}],
@@ -656,44 +658,58 @@ Ext.define('MyDesktop.AdministraUsuarios',
 											},
 											onSelectChange : function(selModel,
 													selections) {
-												 this.down('#editRol').setDisabled(selections.length === 0);
-												 var selection = this.getView()
-													.getSelectionModel()
-													.getSelection()[0]
-												 storePermisos.setProxy({
-														type : 'ajax',
-														api : {
-															read : 'php/catalogos.php/permisos/view/'+ selection.data.id,
-															update: 'php/catalogos.php/permisos/update'
-															
-														},
-														reader : {
-															type : 'json',
-															successProperty : 'success',
-															root : 'data',
-															messageProperty : 'message'
-														},
-														writer : {
-															type : 'json',
-															writeAllFields : false,
-															root : 'data'
-														},
-														listeners : {
-															exception : function(proxy,
-																	response, operation) {
-																Ext.MessageBox
-																		.show({
-																			title : 'REMOTE EXCEPTION',
-																			msg : operation
-																					.getError(),
-																			icon : Ext.MessageBox.ERROR,
-																			buttons : Ext.Msg.OK
-																		});
-															}
+												if (selections.length != 0)
+												{
+													if (!(perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func11 == "1")))
+													{
 
-														}
-													});
-												 storePermisos.load();
+														 this.down('#editRol').setDisabled(selections.length === 0);
+														 var selection = this.getView()
+															.getSelectionModel()
+															.getSelection()[0]
+														 storePermisos.setProxy({
+																type : 'ajax',
+																api : {
+																	read : 'php/catalogos.php/permisos/view/'+ selection.data.id,
+																	update: 'php/catalogos.php/permisos/update'
+																	
+																},
+																reader : {
+																	type : 'json',
+																	successProperty : 'success',
+																	root : 'data',
+																	messageProperty : 'message'
+																},
+																writer : {
+																	type : 'json',
+																	writeAllFields : false,
+																	root : 'data'
+																},
+																listeners : {
+																	exception : function(proxy,
+																			response, operation) {
+																		Ext.MessageBox
+																				.show({
+																					title : 'REMOTE EXCEPTION',
+																					msg : operation
+																							.getError(),
+																					icon : Ext.MessageBox.ERROR,
+																					buttons : Ext.Msg.OK
+																				});
+																	}
+
+																}
+															});
+														 storePermisos.load();
+													}
+													if (!(perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func12 == "1")))
+													{
+
+														 this.down('#deleteRol').setDisabled(selections.length === 0);
+													}
+												}
+												
+												
 // this.down('#editSuc').setDisabled(selections.length === 0);
 
 
@@ -832,7 +848,7 @@ Ext.define('MyDesktop.AdministraUsuarios',
 									                         edit: function (theEditor, e, eOpts) 
 									                         { 
 									                        	  console.debug('edit', e.newValues );
-									                             //store.load();
+									                             // store.load();
 									                         } ,
  validateedit: function (editor, e)
  {
@@ -921,11 +937,11 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																				cls:'RemoveLine',
 																				listeners: {
 															                        beforecheckchange: function(checkcolumn, rowIndex, checked, eOpts) {
-//															                            var row = this.getView().getRow(rowIndex);
+// var row = this.getView().getRow(rowIndex);
 															                        	
 															                            console.debug(checked, rowIndex);
-//															                                record = this.getView().getRecord(row);
-//															                            return false;
+// record = this.getView().getRecord(row);
+// return false;
 															                        }
 															                    },
 																			},
@@ -961,9 +977,9 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																				cls:'RemoveLine',
 																				listeners: {
 															                        beforecheckchange: function(checkcolumn, rowIndex, checked, eOpts) {
-//															                            var row = this.getView().getRow(rowIndex),
-//															                                record = this.getView().getRecord(row);
-//															                            return false;
+// var row = this.getView().getRow(rowIndex),
+// record = this.getView().getRecord(row);
+// return false;
 															                        }
 															                    },
 																			},
@@ -989,9 +1005,9 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																				cls:'RemoveLine',
 																				listeners: {
 															                        beforecheckchange: function(checkcolumn, rowIndex, checked, eOpts) {
-//															                            var row = this.getView().getRow(rowIndex),
-//															                                record = this.getView().getRecord(row);
-//															                            return false;
+// var row = this.getView().getRow(rowIndex),
+// record = this.getView().getRecord(row);
+// return false;
 															                        }
 															                    },
 																			},
@@ -1018,9 +1034,9 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																				cls:'RemoveLine',
 																				listeners: {
 															                        beforecheckchange: function(checkcolumn, rowIndex, checked, eOpts) {
-//															                            var row = this.getView().getRow(rowIndex),
-//															                                record = this.getView().getRecord(row);
-//															                            return false;
+// var row = this.getView().getRow(rowIndex),
+// record = this.getView().getRecord(row);
+// return false;
 															                        }
 															                    },
 																			},
@@ -1046,9 +1062,9 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																				cls:'RemoveLine',
 																				listeners: {
 															                        beforecheckchange: function(checkcolumn, rowIndex, checked, eOpts) {
-//															                            var row = this.getView().getRow(rowIndex),
-//															                                record = this.getView().getRecord(row);
-//															                            return false;
+// var row = this.getView().getRow(rowIndex),
+// record = this.getView().getRecord(row);
+// return false;
 															                        }
 															                    },
 																			},
@@ -1074,9 +1090,9 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																				cls:'RemoveLine',
 																				listeners: {
 															                        beforecheckchange: function(checkcolumn, rowIndex, checked, eOpts) {
-//															                            var row = this.getView().getRow(rowIndex),
-//															                                record = this.getView().getRecord(row);
-//															                            return false;
+// var row = this.getView().getRow(rowIndex),
+// record = this.getView().getRecord(row);
+// return false;
 															                        }
 															                    },
 																			},
@@ -1102,9 +1118,9 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																				cls:'RemoveLine',
 																				listeners: {
 															                        beforecheckchange: function(checkcolumn, rowIndex, checked, eOpts) {
-//															                            var row = this.getView().getRow(rowIndex),
-//															                                record = this.getView().getRecord(row);
-//															                            return false;
+// var row = this.getView().getRow(rowIndex),
+// record = this.getView().getRecord(row);
+// return false;
 															                        }
 															                    },
 																			},
@@ -1130,9 +1146,9 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																				cls:'RemoveLine',
 																				listeners: {
 															                        beforecheckchange: function(checkcolumn, rowIndex, checked, eOpts) {
-//															                            var row = this.getView().getRow(rowIndex),
-//															                                record = this.getView().getRecord(row);
-//															                            return false;
+// var row = this.getView().getRow(rowIndex),
+// record = this.getView().getRecord(row);
+// return false;
 															                        }
 															                    },
 																			},
@@ -1159,9 +1175,9 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																				cls:'RemoveLine',
 																				listeners: {
 															                        beforecheckchange: function(checkcolumn, rowIndex, checked, eOpts) {
-//															                            var row = this.getView().getRow(rowIndex),
-//															                                record = this.getView().getRecord(row);
-//															                            return false;
+// var row = this.getView().getRow(rowIndex),
+// record = this.getView().getRecord(row);
+// return false;
 															                        }
 															                    },
 																			},
@@ -1187,9 +1203,9 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																				cls:'RemoveLine',
 																				listeners: {
 															                        beforecheckchange: function(checkcolumn, rowIndex, checked, eOpts) {
-//															                            var row = this.getView().getRow(rowIndex),
-//															                                record = this.getView().getRecord(row);
-//															                            return false;
+// var row = this.getView().getRow(rowIndex),
+// record = this.getView().getRecord(row);
+// return false;
 															                        }
 															                    },
 																			},
@@ -1215,9 +1231,9 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																				cls:'RemoveLine',
 																				listeners: {
 															                        beforecheckchange: function(checkcolumn, rowIndex, checked, eOpts) {
-//															                            var row = this.getView().getRow(rowIndex),
-//															                                record = this.getView().getRecord(row);
-//															                            return false;
+// var row = this.getView().getRow(rowIndex),
+// record = this.getView().getRecord(row);
+// return false;
 															                        }
 															                    },
 																			},
@@ -1243,9 +1259,9 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																				cls:'RemoveLine',
 																				listeners: {
 															                        beforecheckchange: function(checkcolumn, rowIndex, checked, eOpts) {
-//															                            var row = this.getView().getRow(rowIndex),
-//															                                record = this.getView().getRecord(row);
-//															                            return false;
+// var row = this.getView().getRow(rowIndex),
+// record = this.getView().getRecord(row);
+// return false;
 															                        }
 															                    },
 																			},
@@ -1271,9 +1287,9 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																				cls:'RemoveLine',
 																				listeners: {
 															                        beforecheckchange: function(checkcolumn, rowIndex, checked, eOpts) {
-//															                            var row = this.getView().getRow(rowIndex),
-//															                                record = this.getView().getRecord(row);
-//															                            return false;
+// var row = this.getView().getRow(rowIndex),
+// record = this.getView().getRecord(row);
+// return false;
 															                        }
 															                    },
 																			},
@@ -1299,9 +1315,9 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																				cls:'RemoveLine',
 																				listeners: {
 															                        beforecheckchange: function(checkcolumn, rowIndex, checked, eOpts) {
-//															                            var row = this.getView().getRow(rowIndex),
-//															                                record = this.getView().getRecord(row);
-//															                            return false;
+// var row = this.getView().getRow(rowIndex),
+// record = this.getView().getRecord(row);
+// return false;
 															                        }
 															                    },
 																			},
@@ -1347,7 +1363,7 @@ Ext.define('MyDesktop.AdministraUsuarios',
 											onSelectChange : function(selModel,
 													selections) {
 // this.down('#modifPermisos').setDisabled(selections.length === 0);
-//												this.down('#editRol').setDisabled(selections.length === 0);
+// this.down('#editRol').setDisabled(selections.length === 0);
 												
 
 											},
@@ -1579,8 +1595,7 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																					iconCls : 'add',
 																					text : 'Asociar Sucursal',
 																					disabled: perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func5 == "1"),
-																					itemId : 'asociaSuc',
-																					disabled:true,
+																					itemId : 'asociaSuc',																					
 																					scope : this,																					
 																					handler : this.onAsociaSucClick
 																				},

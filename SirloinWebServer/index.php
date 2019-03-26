@@ -938,7 +938,7 @@
 						<div class="row">
 							<div class="col-md-6">
 								<div class="form-group">
-									<input id="Login_Login_UserName" type="email" name="Login_Login_UserName" placeholder="Usuario *" required data-error="Usuario es requerido." oninvalid="this.setCustomValidity('Usuario es requerido.')" oninput="setCustomValidity('')">
+									<input id="Login_Login_UserName" type="email" onkeyup="minus(this);" name="Login_Login_UserName" placeholder="Usuario *" required data-error="Usuario es requerido." oninvalid="this.setCustomValidity('Usuario es requerido.')" oninput="setCustomValidity('')">
 									<div class="help-block with-errors"></div>
 								</div>
 							</div>

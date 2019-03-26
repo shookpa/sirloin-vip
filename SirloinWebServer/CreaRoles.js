@@ -23,11 +23,11 @@ Ext.define('MyDesktop.CreaRoles', {
 			}
 		});
 		var win = desktop.getWindow('crear-roles');
-		var panelRoles = Ext.create('Ext.form.Panel', {
+		var panelCreaRoles = Ext.create('Ext.form.Panel', {
 			title : '<center>Crear Rol ' + '</center>',
 			bodyStyle : 'padding:5px',
-			id : 'panelRoles',
-			itemId : 'panelRoles',
+			id : 'panelCreaRoles',
+			itemId : 'panelCreaRoles',
 			border : false,
 			// anchor : '100%',
 			fieldDefaults : {
@@ -79,7 +79,7 @@ Ext.define('MyDesktop.CreaRoles', {
 				},
 				// layout : 'fit',
 				defaultType : 'container',
-				items : [ panelRoles, 
+				items : [ panelCreaRoles, 
 //					{
 //					autoScroll : true,
 //					itemId : 'grid-visualiza-restaurantes',

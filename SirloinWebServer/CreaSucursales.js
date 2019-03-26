@@ -33,11 +33,11 @@ Ext.define('MyDesktop.CreaSucursales', {
 			}
 		});
 		var win = desktop.getWindow('crear-sucursales');
-		var panelSucursales = Ext.create('Ext.form.Panel', {
+		var panelCreaSucursales = Ext.create('Ext.form.Panel', {
 			title : '<center>Crear Restaurante ' + '</center>',
 			bodyStyle : 'padding:5px',
-			id : 'panelSucursales',
-			itemId : 'panelSucursales',
+			id : 'panelCreaSucursales',
+			itemId : 'panelCreaSucursales',
 			border : false,
 			// anchor : '100%',
 			fieldDefaults : {
@@ -86,14 +86,14 @@ Ext.define('MyDesktop.CreaSucursales', {
 												// QUE PONGA EL PRIMER REGISTRO
 												// EN EL COMBO
 												// console.debug(storeEstados);
-												panelSucursales.items.get(0).items.get(1).items.get(1).setValue(storeEstados.getAt('0').get('id_estado'));
+												panelCreaSucursales.items.get(0).items.get(1).items.get(1).setValue(storeEstados.getAt('0').get('id_estado'));
 												// SI ES DEL DISTRITO FEDERAL,
 												// QUE CAMBIE LA ETIQUETA DE
 												// MUNICIPIO A DELEGACIÓN:
 												if (storeEstados.getAt('0').get('id_estado') == 9)
-													panelSucursales.items.get(0).items.get(1).items.get(2).setFieldLabel('Delegaci&oacute;n');
+													panelCreaSucursales.items.get(0).items.get(1).items.get(2).setFieldLabel('Delegaci&oacute;n');
 												else
-													panelSucursales.items.get(0).items.get(1).items.get(2).setFieldLabel('Municipio');
+													panelCreaSucursales.items.get(0).items.get(1).items.get(2).setFieldLabel('Municipio');
 											},
 										});
 										storeMunicipios.load({
@@ -106,8 +106,8 @@ Ext.define('MyDesktop.CreaSucursales', {
 												// PINTAR EL STORE DEL MUNICIPIO
 												// QUE PONGA EL PRIMER REGISTRO
 												// EN EL COMBO
-												panelSucursales.items.get(0).items.get(1).items.get(2).clearValue();
-												panelSucursales.items.get(0).items.get(1).items.get(2).setValue(storeMunicipios.getAt('0').get('id_municipio'));
+												panelCreaSucursales.items.get(0).items.get(1).items.get(2).clearValue();
+												panelCreaSucursales.items.get(0).items.get(1).items.get(2).setValue(storeMunicipios.getAt('0').get('id_municipio'));
 											},
 										});
 										storeColonias.load({
@@ -116,7 +116,7 @@ Ext.define('MyDesktop.CreaSucursales', {
 												filtros : 'INNER JOIN cp ON cp.id_cp = colonias.id_cp WHERE cp.cp =' + this.getValue() + ' ORDER BY colonia'
 											},
 											callback : function(records, operation, success) {
-												panelSucursales.items.get(0).items.get(0).items.get(3).clearValue();
+												panelCreaSucursales.items.get(0).items.get(0).items.get(3).clearValue();
 											}
 										});
 										storeCiudades.load({
@@ -125,7 +125,7 @@ Ext.define('MyDesktop.CreaSucursales', {
 												filtros : 'INNER JOIN cp ON cp.id_cp = ciudades.id_cp WHERE cp.cp=' + this.getValue()
 											},
 											callback : function(records, operation, success) {
-												panelSucursales.items.get(0).items.get(0).items.get(2).setValue(storeCiudades.getAt('0').get('ciudad'));
+												panelCreaSucursales.items.get(0).items.get(0).items.get(2).setValue(storeCiudades.getAt('0').get('ciudad'));
 											}
 										});
 									} else {
@@ -151,11 +151,11 @@ Ext.define('MyDesktop.CreaSucursales', {
 										});
 										// LIMPIAMOS LOS VALORES DE TODOS LOS
 										// COMBOS
-										panelSucursales.items.get(0).items.get(1).items.get(1).clearValue();
-										panelSucursales.items.get(0).items.get(1).items.get(2).clearValue();
-										panelSucursales.items.get(0).items.get(0).items.get(3).clearValue();
-										panelSucursales.items.get(0).items.get(0).items.get(2).setValue('');
-										panelSucursales.items.get(0).items.get(1).items.get(2).setFieldLabel('Municipio');
+										panelCreaSucursales.items.get(0).items.get(1).items.get(1).clearValue();
+										panelCreaSucursales.items.get(0).items.get(1).items.get(2).clearValue();
+										panelCreaSucursales.items.get(0).items.get(0).items.get(3).clearValue();
+										panelCreaSucursales.items.get(0).items.get(0).items.get(2).setValue('');
+										panelCreaSucursales.items.get(0).items.get(1).items.get(2).setFieldLabel('Municipio');
 									}
 //								}//se comenta para que no espere el enter
 							}
@@ -190,14 +190,14 @@ Ext.define('MyDesktop.CreaSucursales', {
 										filtros : 'INNER JOIN cp ON cp.id_cp = colonias.id_cp WHERE colonias.id_colonia=' + record[0].get('id_colonia')
 									},
 									callback : function(records, operation, success) {
-										panelSucursales.items.get(0).items.get(0).items.get(1).setValue(storeCP.getAt('0').get('cp'));
+										panelCreaSucursales.items.get(0).items.get(0).items.get(1).setValue(storeCP.getAt('0').get('cp'));
 										storeCiudades.load({
 											params : {
 												tabla : 'ciudades',
-												filtros : 'INNER JOIN cp ON cp.id_cp = ciudades.id_cp WHERE cp.cp=' + panelSucursales.items.get(0).items.get(0).items.get(1).getValue()
+												filtros : 'INNER JOIN cp ON cp.id_cp = ciudades.id_cp WHERE cp.cp=' + panelCreaSucursales.items.get(0).items.get(0).items.get(1).getValue()
 											},
 											callback : function(records, operation, success) {
-												panelSucursales.items.get(0).items.get(0).items.get(2).setValue(storeCiudades.getAt('0').get('ciudad'));
+												panelCreaSucursales.items.get(0).items.get(0).items.get(2).setValue(storeCiudades.getAt('0').get('ciudad'));
 											}
 										});
 									}
@@ -251,16 +251,16 @@ Ext.define('MyDesktop.CreaSucursales', {
 										filtros : 'WHERE id_estado=' + record[0].get('id_estado') + ' ORDER BY municipio'
 									}
 								});
-								panelSucursales.items.get(0).items.get(1).items.get(2).clearValue();
-								panelSucursales.items.get(0).items.get(0).items.get(3).clearValue();
-								panelSucursales.items.get(0).items.get(0).items.get(2).setValue('');
-								panelSucursales.items.get(0).items.get(0).items.get(1).setValue('');
+								panelCreaSucursales.items.get(0).items.get(1).items.get(2).clearValue();
+								panelCreaSucursales.items.get(0).items.get(0).items.get(3).clearValue();
+								panelCreaSucursales.items.get(0).items.get(0).items.get(2).setValue('');
+								panelCreaSucursales.items.get(0).items.get(0).items.get(1).setValue('');
 								// SI SELECCIONA EL DISTRITO FEDERAL, QUE CAMBIE
 								// LA ETIQUETA DE MUNICIPIO A DELEGACIÓN:
 								if (record[0].get('id_estado') == 9)
-									panelSucursales.items.get(0).items.get(1).items.get(2).setFieldLabel('Delegaci&oacute;n');
+									panelCreaSucursales.items.get(0).items.get(1).items.get(2).setFieldLabel('Delegaci&oacute;n');
 								else
-									panelSucursales.items.get(0).items.get(1).items.get(2).setFieldLabel('Municipio');
+									panelCreaSucursales.items.get(0).items.get(1).items.get(2).setFieldLabel('Municipio');
 							}
 						}
 					}, {
@@ -290,12 +290,12 @@ Ext.define('MyDesktop.CreaSucursales', {
 									// DESPUES DE QUE ACABE DE PINTAR EL
 									// STORE DEL COLONIAS QUE PONGA EL
 									// PRIMER REGISTRO EN EL COMBO
-									// panelSucursales.items.get(0).items.get(0).items.get(3).setValue(storeColonias.getAt('0').get('id_colonia'));
+									// panelCreaSucursales.items.get(0).items.get(0).items.get(3).setValue(storeColonias.getAt('0').get('id_colonia'));
 									}
 								});
-								panelSucursales.items.get(0).items.get(0).items.get(3).clearValue();
-								panelSucursales.items.get(0).items.get(0).items.get(2).setValue('');
-								panelSucursales.items.get(0).items.get(0).items.get(1).setValue('');
+								panelCreaSucursales.items.get(0).items.get(0).items.get(3).clearValue();
+								panelCreaSucursales.items.get(0).items.get(0).items.get(2).setValue('');
+								panelCreaSucursales.items.get(0).items.get(0).items.get(1).setValue('');
 							}
 						}
 					}, {
@@ -348,7 +348,7 @@ Ext.define('MyDesktop.CreaSucursales', {
 				},
 				// layout : 'fit',
 				defaultType : 'container',
-				items : [ panelSucursales ],
+				items : [ panelCreaSucursales ],
 				buttons : [ {
 					text : 'Guardar',
 					tabIndex : 20,

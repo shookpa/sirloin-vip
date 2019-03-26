@@ -1,12 +1,47 @@
 <?php 
-date_default_timezone_set('America/Mexico_City');
-include('../lib/sesion_usuario.php');
-include('../lib/valida_sesion.php');
-include("../lib/conexionMysql.php");
-include_once "PHPExcel/PHPExcel.php";
+echo "veamos por request";
 var_dump($_REQUEST);
+echo "<br>veamos por post";
 var_dump($_POST);
+echo "<br>veamos por get";
 var_dump($_GET);
+
+$arrayDatosInsertar =  json_decode ( str_replace("\\", "", $_REQUEST ["data"]), true );
+echo "<br>veamos antes de procesar:";
+var_dump($arrayDatosInsertar);
+
+
+if (isset ( $arrayDatosInsertar["seleccionados"] ) && $arrayDatosInsertar["seleccionados"]!="") {
+		$seleccionados = str_replace('[', "", str_replace(']', "", str_replace('"', "", $arrayDatosInsertar["seleccionados"])));
+		$condSeleccionados = "AND clientes_vip.id IN ( $seleccionados )";
+}
+echo $condSeleccionados;
+// $arrayDatosInsertar = $_REQUEST ["store_data"];
+//COMO HASTA AHORITA SIGUE SIENDO UN OBJETO, LO CONVERTIMOS A UN ARREGLO PARA MIS FUNCIONES
+$seleccion="";
+foreach ( $arrayDatosInsertar as $key => $value ) {
+	//	     $arrayDatosInsertar2[$key] = utf8_encode(trim($value));
+	if ($key=="seleccionados") {
+		// 		$restaurantes =  json_decode($value);
+		$seleccionados=  $value;
+		// 		var_dump($value);
+		foreach ( $value  as $keyC => $valueC ) {
+			// 						echo "--------$keyC => $valueC----------";
+			$seleccionados [$i] = html_entity_decode ( preg_replace ( "/\\\\u([0-9abcdef]{4})/", "&#x$1;", trim ( $valueC ) ) );
+			$seleccion.=$seleccionados [$i].",";
+			$i++;
+		}
+		
+	}
+	else
+		$arrayDatosInsertar2 [$key] = html_entity_decode ( preg_replace ( "/\\\\u([0-9abcdef]{4})/", "&#x$1;", trim ( $value ) ) );
+}
+echo "<br>veamos procesandolo:";
+var_dump($arrayDatosInsertar2);
+echo "<br>veamos los seleccionados:";
+var_dump($seleccionados);
+$seleccion=substr($seleccion, 0,strlen($seleccion)-1);
+echo "<br>veamos la seleccion:$seleccion";
 // // Se crea el objeto PHPExcel
 // $objPHPExcel = new PHPExcel();
 // $nombreArchivo="Listado_de_Clientes_VIP_al_".date("Y-m-d_H.i.s");

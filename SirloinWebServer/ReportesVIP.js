@@ -8,9 +8,9 @@ Ext.require([ 'Ext.grid.*', 'Ext.data.*', 'Ext.form.*', 'Ext.layout.*', 'Ext.tab
 //var selModel = new Ext.grid.CheckboxSelectionModel();
 // GUARDAMOS EN UN OBJETO LOS PERMISOS GUARDADOS EN EL sessionStorage:
 var perm= JSON.parse(sessionStorage.permisos);
-Ext.define('Writer.Grid', {
+Ext.define('Writer.GridReportes', {
 	extend : 'Ext.grid.Panel',
-	alias : 'widget.writergrid',
+	alias : 'widget.writergridReportes',
 	
 	requires : [ 'Ext.form.field.Text', 'Ext.toolbar.TextItem' ],
 	initComponent : function() {
@@ -89,6 +89,14 @@ Ext.define('Writer.Grid', {
 				width : 80,
 				sortable : true,
 				dataIndex : 'cp',
+				field : {
+					type : 'textfield'
+				}
+			}, {
+				header : 'Fecha nacimiento',
+				width : 120,
+				sortable : true,
+				dataIndex : 'fecha_nac',
 				field : {
 					type : 'textfield'
 				}
@@ -179,21 +187,26 @@ Ext.define('Writer.Grid', {
 	},
 	onSelectChange : function(selModel, selections) {
 // console.debug("quiobolas", this.up().up().items.get(0).query(".button")[3]);
-//		console.debug("selections.length", selections.length);
+//		console.debug("selections.length", selections.length, this.up().up().down('#modifyBalance')); 
 		
 // Ext.getCmp('PanelReporteMovimientos').items.get(0).query(".button")[3]
-		
+		if (selections.length >0)
+			this.up().up().down('#exportExcel').setText("Exportar Seleccionados a Excel") 
+		else
+			this.up().up().down('#exportExcel').setText("Exportar todo a Excel");
 		if(perm!=null )
 		{
-			this.up().up().down('#sendPromotion').setDisabled(selections.length === 0 || !perm.some(item => item.id_permiso == '3' && item.per_func5 == "1"));
-// this.up().up().down('#modifyBalance').setDisabled(!(selections.length == 1)
+//			this.up().up().down('#sendPromotion').setDisabled(selections.length === 0 || !perm.some(item => item.id_permiso == '3' && item.per_func5 == "1"));
+			this.up().up().down('#modifyBalance').setDisabled(!(selections.length == 1));
 // || !perm.some(item => item.id_permiso == '3' && item.per_func6 == "1"));
 		}
 		else
 		{
-			this.up().up().down('#sendPromotion').setDisabled(selections.length === 0);
-// this.up().up().down('#modifyBalance').setDisabled(!(selections.length == 1));
+//			this.up().up().down('#sendPromotion').setDisabled(selections.length === 0);
+			this.up().up().down('#modifyBalance').setDisabled(!(selections.length == 1));
 		}
+		 
+		
 		
 	},
 	onSync : function() {
@@ -206,7 +219,7 @@ Ext.define('Model.Movimientos', {
 		name : 'id',
 		type : 'int',
 		useNull : true
-	}, 'mov_vip', 'num_vip', 'nom_vip', 'nombre_restaurante','id_restaurante','fecha_mov', 'doc_vip', 'det_vip', 'ema_vip', 'fec_vip','fuc_vip','cp', 'tel_vip', 'fup_vip', {name:'tct_vip', type:'number'}, {name:'mon_vip', type:'number'}, {name:'muc_vip', type:'number'}, {name:'pto_vip', type:'number'}]
+	}, 'mov_vip', 'num_vip', 'nom_vip', 'nombre_restaurante','id_restaurante','fecha_nac','fecha_mov', 'doc_vip', 'det_vip', 'ema_vip', 'fec_vip','fuc_vip','cp', 'tel_vip', 'fup_vip', {name:'tct_vip', type:'number'}, {name:'mon_vip', type:'number'}, {name:'muc_vip', type:'number'}, {name:'pto_vip', type:'number'}]
 });
 Ext.require([ 'Ext.data.*', 'Ext.tip.QuickTipManager', 'Ext.window.MessageBox' ]);
 Ext.tip.QuickTipManager.init();
@@ -262,7 +275,7 @@ Ext.define('MyDesktop.ReportesVIP', {
 		}
 	},
 	createWindow : function(aplicacion) {
-		sm = Ext.create('Ext.selection.CheckboxModel', {
+		selModel = Ext.create('Ext.selection.CheckboxModel', {
 			selType : 'checkboxmodel',
 			 checkOnly: true,
 			    
@@ -279,40 +292,11 @@ Ext.define('MyDesktop.ReportesVIP', {
 			var app = aplicacion;
 		var desktop = app.getDesktop();
 		var win = desktop.getWindow('panel-reportes');
-		var PanelReporteClientes = Ext.create('Ext.form.Panel', {
-			title : '<center>Listado de Clientes VIP</center>',
-			bodyStyle : 'padding:5px',
-			id : 'PanelReporteClientes',
-			border : false,
-			anchor : '100%',
-			fieldDefaults : {
-				labelAlign : 'top',
-				msgTarget : 'side'
-			},
-			layout : 'anchor',
-			items : [ {
-				border : false,
-				defaults : {
-					anchor : '100%'
-				},
-				layout : 'anchor',
-				buttons : [ {
-					text : 'Generar Reporte',
-					tabIndex : 21,
-					href:"php/lib/export_excel_cli_vip_todos.php",
-					params:{},
-					handler : function(btn) {
-//						formulario = this.up('form').getForm();
-//						panelForm = this.up('form');
-//						window.open("php/lib/export_excel_cli_vip_todos.php");
-					}
-				} ]
-			} ]
-		});
+	
 		var idCampo=0;
 		var filtros=[];
 		var PanelReporteMovimientos = Ext.create('Ext.form.Panel', {
-			title : '<center>Listado de Movimientos de Tarjetas VIP</center>',
+			title : '<center>Listado de Tarjetas VIP</center>',
 			bodyStyle : 'padding:5px',
 			itemId : 'pnlReporte',
 			id : 'PanelReporteMovimientos',
@@ -342,7 +326,7 @@ Ext.define('MyDesktop.ReportesVIP', {
 						labelWidth : 50,
 						listeners : {
 							change : function(combo, record) {
-								console.debug(combo, record);
+//								console.debug(combo, record);
 								var panel=combo.up("#pnlReporte");
 //								if (record>0)
 //									panel.down('#btnAgregarCampo').setDisabled(false);
@@ -384,15 +368,21 @@ Ext.define('MyDesktop.ReportesVIP', {
 								"campo" : "Por Codigo Postal"
 							}, {
 								"id" : 9,
-								"campo" : "Por tipo de movimiento"
+								"campo" : "Por fecha de nacimiento"
 							}, {
 								"id" : 10,
-								"campo" : "Por monto de movimiento"
+								"campo" : "Por mes de nacimiento"
 							}, {
 								"id" : 11,
-								"campo" : "Por fecha de movimiento"
+								"campo" : "Por tipo de movimiento"
 							}, {
 								"id" : 12,
+								"campo" : "Por monto de movimiento"
+							}, {
+								"id" : 13,
+								"campo" : "Por fecha de movimiento"
+							}, {
+								"id" : 14,
 								"campo" : "Por Uso de la tarjeta"
 							}  ]
 						}),
@@ -406,12 +396,13 @@ Ext.define('MyDesktop.ReportesVIP', {
 						itemId : 'btnAgregarCampo',
 						scope : this,
 						handler : function(btn) {
+								Ext.suspendLayouts();
 								idCampo++;
 								// en este momento tenemos que agregar el
 								// elemento conforme sea necesario:
 								// y tambien eliminar la opción del combo actual
 								// de seleccion del campo
-								console.debug("Por CREAR el campo:"+idCampo);
+//								console.debug("Por CREAR el campo:"+idCampo);
 								var panel=btn.up("#pnlReporte");
 								var toolbar = panel.down('#toolbarCampos');
 								var campoSel=panel.down('#campoSeleccionado').getValue();
@@ -590,7 +581,81 @@ Ext.define('MyDesktop.ReportesVIP', {
 											emptyText : 'Ingrese el Codigo Postal'
 										});	
 									break;
-								    case 9:	// Por tipo de movimiento
+								    case 9:	// Por fecha de nacimiento
+								    	toolbar.add({
+											xtype : 'datefield',
+											name : 'fechaNacIni',
+											fieldLabel: 'Por fecha de nacimiento',
+											itemId : 'fechaNacIni',
+											width: 240,
+											emptyText : 'Seleccione fecha de nacimiento inicial',
+											format : 'Y-m-d',
+									    	});
+									    	toolbar.add({
+											xtype : 'datefield',
+											name : 'fechaNacFin',
+											fieldLabel: ' ',
+											itemId : 'fechaNacFin',
+											width: 240,
+											emptyText : 'Seleccione fecha de nacimiento final',
+											format : 'Y-m-d',
+									    	});
+								    break;	
+								    case 10:	// Por mes de nacimiento
+								    	toolbar.add({
+											xtype : 'combobox',
+											name : 'mesNac',
+											fieldLabel: 'Por mes de nacimiento',
+											itemId : 'mesNac',
+											displayField : 'mes',
+											valueField : 'id',
+											forceSelection : true,
+											width: 240,
+											emptyText : 'Seleccione mes de nacimiento',
+											store : Ext.create('Ext.data.Store', {
+												fields : [ 'mes' ],
+												data : [ {
+													"id" : 1,
+													"mes" : "Enero"
+												}, {
+													"id" : 2,
+													"mes" : "Febrero"
+												}, {
+													"id" : 3,
+													"mes" : "Marzo"
+												}, {
+													"id" : 4,
+													"mes" : "Abril"
+												}, {
+													"id" : 5,
+													"mes" : "Mayo"
+												}, {
+													"id" : 6,
+													"mes" : "Junio"
+												}, {
+													"id" : 7,
+													"mes" : "Julio"
+												}, {
+													"id" : 8,
+													"mes" : "Agosto"
+												}, {
+													"id" : 9,
+													"mes" : "Septiembre"
+												}, {
+													"id" : 10,
+													"mes" : "Octubre"
+												}, {
+													"id" : 11,
+													"mes" : "Noviembre"
+												}, {
+													"id" : 12,
+													"mes" : "Diciembre"
+												} ]
+											}),
+									    	});
+									    	
+								    break;	
+								    case 11:	// Por tipo de movimiento
 								    	toolbar.add({
 											xtype : 'combobox',
 											itemId : 'tipo_mov',
@@ -619,6 +684,12 @@ Ext.define('MyDesktop.ReportesVIP', {
 												}, {
 													"id" : 4,
 													"movimiento" : "Registro de tarjeta en sistema web"
+												}, {
+													"id" : 5,
+													"movimiento" : "Modificacion de saldo desde Sistema Web"
+												}, {
+													"id" : 6,
+													"movimiento" : "Vencimiento de puntos"
 												} ]
 											}),
 											displayField : 'movimiento',
@@ -626,7 +697,7 @@ Ext.define('MyDesktop.ReportesVIP', {
 											forceSelection : true
 										});
 									break;
-								    case 10:// Por monto de movimiento
+								    case 12:// Por monto de movimiento
 								    	toolbar.add({
 											xtype : 'combobox',
 											itemId : 'operMov1',
@@ -714,7 +785,7 @@ Ext.define('MyDesktop.ReportesVIP', {
 										enableKeyEvents : true,
 									});
 									break;
-								    case 11:// Por fecha de movimiento
+								    case 13:// Por fecha de movimiento
 								    	toolbar.add({
 										xtype : 'datefield',
 										name : 'fechaMovIni',
@@ -734,9 +805,9 @@ Ext.define('MyDesktop.ReportesVIP', {
 										format : 'Y-m-d',
 								    	});
 									break;
+								    
 									
-									
-								    case 12:// Por uso de la tarjeta
+								    case 14:// Por uso de la tarjeta
 								    	toolbar.add({
 											xtype : 'combobox',
 											itemId : 'operUso',
@@ -833,18 +904,25 @@ Ext.define('MyDesktop.ReportesVIP', {
 								}
 								var storeItems = panel.down('#campoSeleccionado').getStore().data.items;
 						    	var storeData = panel.down('#campoSeleccionado').getStore();
-						    	console.debug(storeData.data.length );
-						    	campoSel= campoSel - (13 - storeData.data.length);
-						    	storeItems.forEach( function(item,index){
-						    		
-							    	if(item.data.id==campoSel){
-							    		storeData.removeAt(campoSel);							    		
-							    		panel.down('#campoSeleccionado').setValue(0);
-							    	}
-						    	});
+//						    	Si se agregan filtros de busqueda, el valor de abjo debe corresponder:
+//						    	campoSel= campoSel - (14 - storeData.data.length);
+//						    	storeItems.forEach( function(item,index){
+//						    		console.debug("lectura:",item.data.id,campoSel)
+//							    	if(item.data.id==campoSel){
+//							    		storeData.removeAt(campoSel);							    		
+//							    		panel.down('#campoSeleccionado').setValue(0);
+//							    	}
+//						    	});
+						    	storeData.removeAt(storeData.indexOfId(campoSel));
+						    	panel.down('#campoSeleccionado').setValue(0);
+						    	
+						    	
+						    	
+						    	
+						    	
 								storeData.sort("id", "ASC");
 								
-														
+								Ext.resumeLayouts(true);							
 							
 						}
 						
@@ -856,7 +934,7 @@ Ext.define('MyDesktop.ReportesVIP', {
 						scope : this,
 						handler : function(btn) {
 								idCampo--;	
-								console.debug("Por ELIMINAR el campo:"+idCampo);
+//								console.debug("Por ELIMINAR el campo:"+idCampo);
 								var panel=btn.up("#pnlReporte");
 								// Eliminar el ultimo campo agregado al toolbar
 								// y tambien agregar la opción al combo
@@ -874,11 +952,13 @@ Ext.define('MyDesktop.ReportesVIP', {
 								storeData.add({"id" : 5,"campo" : "Por fecha apertura tarjeta"});
 								storeData.add({"id" : 6,"campo" : "Por telefono"});
 								storeData.add({"id" : 7,"campo" : "Por email"});
-								storeData.add({"id" : 8,"campo" : "Por Codigo Postal"});
-								storeData.add({"id" : 9,"campo" : "Por tipo de movimiento"});
-								storeData.add({"id" : 10,"campo" : "Por monto de movimiento"});
-								storeData.add({"id" : 11,"campo" : "Por fecha de movimiento"});
-								storeData.add({"id" : 12,"campo" : "Por Uso de la tarjeta"});
+								storeData.add({"id" : 8,"campo" : "Por Codigo Postal"});								
+								storeData.add({"id" : 9,"campo" : "Por fecha de nacimiento"});
+								storeData.add({"id" : 10,"campo" : "Por mes de nacimiento"});
+								storeData.add({"id" : 11,"campo" : "Por tipo de movimiento"});
+								storeData.add({"id" : 12,"campo" : "Por monto de movimiento"});
+								storeData.add({"id" : 13,"campo" : "Por fecha de movimiento"});
+								storeData.add({"id" : 14,"campo" : "Por Uso de la tarjeta"});
 								panel.down('#campoSeleccionado').setValue(0);
 // var campoEliminar=toolbar.items.items[idCampo].itemId;
 // switch (campoEliminar) {
@@ -947,7 +1027,7 @@ Ext.define('MyDesktop.ReportesVIP', {
 								var toolbar = panel.down('#toolbarCampos'); 
 								filtros=[];
 								for (var i = 0; i < toolbar.items.items.length; i++) {
-									console.debug("Toolbar items:",toolbar.items.items[i].itemId,toolbar.items.items[i].value);
+//									console.debug("Toolbar items:",toolbar.items.items[i].itemId,toolbar.items.items[i].value);
 									filtros[toolbar.items.items[i].itemId]=toolbar.items.items[i].value;
 								}
 								
@@ -1037,8 +1117,8 @@ Ext.define('MyDesktop.ReportesVIP', {
 				items : [ {
 					itemId : 'gridMovimientos',
 					id : 'gridMovimientos',
-					xtype : 'writergrid',
-					selModel : sm,
+					xtype : 'writergridReportes',
+					selModel : selModel,
 					height : 400,
 					store : storeGridMovs,
 					 dockedItems: [{
@@ -1049,47 +1129,99 @@ Ext.define('MyDesktop.ReportesVIP', {
 					        displayInfo: true
 					    }]
 				} ],
-				buttons : [  {
-					text : 'Excel de saldos de Tarjetas',
+				buttons : [  
+//					{
+//					text : 'Excel de saldos de Tarjetas',
+//					tabIndex : 21,
+//					disabled: perm!=null && !perm.some(item => item.id_permiso == '3' && item.per_func3 == "1"),
+////					href:"php/lib/test_excel_params.php",
+//					method      : 'POST',
+//				    url         : 'php/lib/export_excel_cli_vip_todos.php',
+//					params:{ xtype: 'pagingtoolbar'},
+//					baseParams:{ dock: 'bottom'},
+//					handler : function(btn) {
+//						
+//						var panel=btn.up("#pnlReporte");
+//						var toolbar = panel.down('#toolbarCampos'); 
+//						filtros=[];
+//						for (var i = 0; i < toolbar.items.items.length; i++) {
+//							console.debug("Toolbar items:",toolbar.items.items[i].itemId,toolbar.items.items[i].value);
+//							filtros[toolbar.items.items[i].itemId]=toolbar.items.items[i].value;
+//						}
+//						btn.setParams(filtros);
+//						console.debug("------------------Ya mando los filtros al BOTON----------");
+////						formulario = this.up('form').getForm();
+////						panelForm = this.up('form');
+////						window.open("php/lib/export_excel_cli_vip_todos.php");
+//					}
+//				},
+				{
+					text : 'Exportar todo a Excel',
 					tabIndex : 21,
 					disabled: perm!=null && !perm.some(item => item.id_permiso == '3' && item.per_func3 == "1"),
-//					href:"php/lib/test_excel_params.php",
 					method      : 'POST',
-				    url         : 'php/lib/export_excel_cli_vip_todos.php',
+					itemId : 'exportExcel',
+//				    href         : 'php/lib/test_excel_params.php',
 					params:{ xtype: 'pagingtoolbar'},
 					baseParams:{ dock: 'bottom'},
 					handler : function(btn) {
-						
+						var s = selModel.getSelection();
+
+						selected = [];
+						Ext.each(s, function(item) {
+
+								selected.push(item.internalId);
+						});
+						console.debug("selected:",selected);
 						var panel=btn.up("#pnlReporte");
 						var toolbar = panel.down('#toolbarCampos'); 
-						filtros=[];
+						filtros={};
 						for (var i = 0; i < toolbar.items.items.length; i++) {
 							console.debug("Toolbar items:",toolbar.items.items[i].itemId,toolbar.items.items[i].value);
 							filtros[toolbar.items.items[i].itemId]=toolbar.items.items[i].value;
-						}
-						btn.setParams(filtros);
+						}		
+						filtros["seleccionados"]=selected;
+						console.debug("filtros:",filtros, typeof(filtros), typeof(filtros["seleccionados"]));
+						filtrosJSON=JSON.stringify(filtros);
+						console.debug("filtrosJSON:",filtrosJSON);
+//						btn.setParams(filtros);
+						Ext.Ajax.request({
+							url : 'php/lib/export_excel_cli_vip_todos.php',
+							method : 'POST',
+							params : {
+								"data" : filtrosJSON
+							},
+							success : function(response) {
+								console.debug("http://www.programadepuntos-vip.com/"+response.responseText);
+								window.open("http://www.programadepuntos-vip.com/"+response.responseText);
+							},
+							failure : function(response) {
+								console.log(response.responseText);
+							}
+						});
 						console.debug("------------------Ya mando los filtros al BOTON----------");
 //						formulario = this.up('form').getForm();
 //						panelForm = this.up('form');
 //						window.open("php/lib/export_excel_cli_vip_todos.php");
 					}
-				},{
-					text : 'Enviar Promoción',
+				}, {
+					text : 'Modificar Puntos',
 					tabIndex : 21,
 					disabled:true,
-					itemId : 'sendPromotion',
+					itemId : 'modifyBalance',
 					handler : function(btn) {
-						var s = selModel.getSelection();
+						
+						var selection = selModel.getSelection()[0];
 						// And then you can iterate over the selected items,
 						// e.g.:
-						selected = [];
-						Ext.each(s, function(item) {
-							if(item.data.ema_vip!=null && item.data.ema_vip!="" && !selected.includes(item.data.ema_vip))
-								selected.push(item.data.ema_vip);
-						});
-						console.debug(selected);
-						modulo = new MyDesktop.EnviaPromociones();
-						var window = modulo.createWindow(app, selected);
+//						selected = [];
+//						Ext.each(s, function(item) {
+//							if(item.data.ema_vip!=null && item.data.ema_vip!="" && !selected.includes(item.data.ema_vip))
+//								selected.push(item.data.ema_vip);
+//						});
+						modulo = new MyDesktop.ModificarSaldo();
+						console.debug("veamos la seleccion",selection.data);
+						var window = modulo.createWindow(app, selection.data);
 						window.show();
 						// Ext.MessageBox.show({
 						// title : 'ENVIO DE PROMOCIONES EN DESARROLLO',
@@ -1102,14 +1234,45 @@ Ext.define('MyDesktop.ReportesVIP', {
 						// panelForm = this.up('form');
 						// window.open("php/lib/export_excel_cli_vip_todos.php");
 					}
-				} ]
+				}
+//				,{
+//					text : 'Enviar Promoción',
+//					tabIndex : 21,
+//					disabled:true,
+//					itemId : 'sendPromotion',
+//					handler : function(btn) {
+//						var s = selModel.getSelection();
+//						// And then you can iterate over the selected items,
+//						// e.g.:
+//						selected = [];
+//						Ext.each(s, function(item) {
+//							if(item.data.ema_vip!=null && item.data.ema_vip!="" && !selected.includes(item.data.ema_vip))
+//								selected.push(item.data.ema_vip);
+//						});
+//						console.debug(selected);
+//						modulo = new MyDesktop.EnviaPromociones();
+//						var window = modulo.createWindow(app, selected);
+//						window.show();
+//						// Ext.MessageBox.show({
+//						// title : 'ENVIO DE PROMOCIONES EN DESARROLLO',
+//						// msg : "Enviará correos a
+//						// "+selModel.getSelection().length+" clientes",
+//						// icon : Ext.MessageBox.INFO,
+//						// buttons : Ext.Msg.OK
+//						// });
+//						// formulario = this.up('form').getForm();
+//						// panelForm = this.up('form');
+//						// window.open("php/lib/export_excel_cli_vip_todos.php");
+//					}
+//				}
+				]
 			} ]
 		});
 		
 		if (!win) {
 			win = desktop.createWindow({
 				id : 'panel-reportes',
-				title : 'Modulo de Reportes',
+				title : 'Modulo de Reportes, Exportación y Modificación de Saldos',
 				width :  1500,
 				height :600,
 				modal : true,

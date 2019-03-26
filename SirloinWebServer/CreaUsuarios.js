@@ -48,9 +48,9 @@ Ext.define('MyDesktop.CreaUsuarios', {
             	
             }
         }); 
-		Ext.define('Writer.Grid', {
+		Ext.define('Writer.GridCreaUsuarios', {
 			extend : 'Ext.grid.Panel',
-			alias : 'widget.writergrid',
+			alias : 'widget.writergridCreaUsuarios',
 			requires : [
 
 			'Ext.form.field.Text', 'Ext.toolbar.TextItem' ],
@@ -177,11 +177,11 @@ Ext.define('MyDesktop.CreaUsuarios', {
 
 						});
 		var win = desktop.getWindow('crear-usuarios');
-		var panelUsuarios = Ext.create('Ext.form.Panel', {
+		var panelCreaUsuarios = Ext.create('Ext.form.Panel', {
 			title : '<center>Crear Usuario ' + '</center>',
 			bodyStyle : 'padding:5px',
-			id : 'panelUsuarios',
-			itemId : 'panelUsuarios',
+			id : 'panelCreaUsuarios',
+			itemId : 'panelCreaUsuarios',
 			border : false,
 //			anchor : '100%',
 			fieldDefaults : {
@@ -205,6 +205,7 @@ Ext.define('MyDesktop.CreaUsuarios', {
 						name : 'tipoUser',
 						tabIndex : 1,
 						allowBlank : false,
+						itemId : 'crear-usuarios-tipo-usuario',
 						// id: 'tituloCot',
 						anchor : '100%',
 						emptyText : 'Selecciona...',
@@ -219,18 +220,18 @@ Ext.define('MyDesktop.CreaUsuarios', {
 								 	
 								if(this.getValue()==1 || this.getValue()=='1')
 								{
-									panelUsuarios.items.get(0).items.get(0).items.get(1).allowBlank=true;
-									panelUsuarios.items.get(0).items.get(1).items.get(0).allowBlank=true;
-									panelUsuarios.items.get(0).items.get(0).items.get(1).setVisible(false);
-									panelUsuarios.items.get(0).items.get(1).items.get(0).setVisible(false);
+									panelCreaUsuarios.items.get(0).items.get(0).items.get(1).allowBlank=true;
+									panelCreaUsuarios.items.get(0).items.get(1).items.get(0).allowBlank=true;
+									panelCreaUsuarios.items.get(0).items.get(0).items.get(1).setVisible(false);
+									panelCreaUsuarios.items.get(0).items.get(1).items.get(0).setVisible(false);
 								}
 									
 								else
 								{
-									panelUsuarios.items.get(0).items.get(0).items.get(1).allowBlank=false;
-									panelUsuarios.items.get(0).items.get(1).items.get(0).allowBlank=false;
-									panelUsuarios.items.get(0).items.get(0).items.get(1).setVisible(true);
-									panelUsuarios.items.get(0).items.get(1).items.get(0).setVisible(true);
+									panelCreaUsuarios.items.get(0).items.get(0).items.get(1).allowBlank=false;
+									panelCreaUsuarios.items.get(0).items.get(1).items.get(0).allowBlank=false;
+									panelCreaUsuarios.items.get(0).items.get(0).items.get(1).setVisible(true);
+									panelCreaUsuarios.items.get(0).items.get(1).items.get(0).setVisible(true);
 								}
 								
 								
@@ -402,13 +403,13 @@ Ext.define('MyDesktop.CreaUsuarios', {
 				},
 				//layout : 'fit',
 				defaultType : 'container',
-				items : [ panelUsuarios, {
+				items : [ panelCreaUsuarios, {
 					autoScroll : true,
 					itemId : 'grid-visualiza-restaurantes',
 					id : 'grid-visualiza-restaurantes',
 					hidden:true,
 					visible:false,
-					xtype : 'writergrid',
+					xtype : 'writergridCreaUsuarios',
 					selModel : selModel,
 					store : store
 				}],
@@ -462,10 +463,10 @@ Ext.define('MyDesktop.CreaUsuarios', {
 									} catch (exp) {}
 								},
 								failure : function(form, action) {
-									//
+									var data = Ext.decode(action.response.responseText);
 									Ext.Msg.show({
 										title : 'Problema al salvar',
-										msg : 'Favor de intentar mas tarde',
+										msg : data.mensaje,
 										buttons : Ext.Msg.OK,
 										icon : Ext.Msg.ERROR
 									});
@@ -478,6 +479,16 @@ Ext.define('MyDesktop.CreaUsuarios', {
 				} ]
 			}).show();
 		}
+
+		var tip = Ext.create('Ext.tip.ToolTip', {
+		    target: panelCreaUsuarios.items.get(0).items.get(0).items.get(0).id,
+		    html: 'El tipo de usuario permite seleccionar si es un administrador <br> con todos los permisos, o un administrador con ciertos privilegios'
+		});
+		var tip2 = Ext.create('Ext.tip.ToolTip', {
+		    target: panelCreaUsuarios.items.get(0).items.get(0).items.get(1).id,
+		    html: 'Dependiendo del rol seleccionado se le asignaran <br> los permisos de acceso en los modulos del sistema'
+		});
+		
 		return win;
 	}
 });

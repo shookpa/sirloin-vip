@@ -31,11 +31,11 @@ Ext.define('MyDesktop.CreaEmpresas', {
 			}
 		});
 		var win = desktop.getWindow('crear-empresas');
-		var panelEmpresas = Ext.create('Ext.form.Panel', {
+		var panelCreaEmpresas = Ext.create('Ext.form.Panel', {
 			title : '<center>Crear Empresa ' + '</center>',
 			bodyStyle : 'padding:5px',
-			id : 'panelEmpresas',
-			itemId : 'panelEmpresas',
+			id : 'panelCreaEmpresas',
+			itemId : 'panelCreaEmpresas',
 			border : false,
 			// anchor : '100%',
 			fieldDefaults : {
@@ -84,14 +84,14 @@ Ext.define('MyDesktop.CreaEmpresas', {
 												// QUE PONGA EL PRIMER REGISTRO
 												// EN EL COMBO
 												// console.debug(storeEstados);
-												panelEmpresas.items.get(0).items.get(1).items.get(1).setValue(storeEstados.getAt('0').get('id_estado'));
+												panelCreaEmpresas.items.get(0).items.get(1).items.get(1).setValue(storeEstados.getAt('0').get('id_estado'));
 												// SI ES DEL DISTRITO FEDERAL,
 												// QUE CAMBIE LA ETIQUETA DE
 												// MUNICIPIO A DELEGACIÓN:
 												if (storeEstados.getAt('0').get('id_estado') == 9)
-													panelEmpresas.items.get(0).items.get(1).items.get(2).setFieldLabel('Delegaci&oacute;n');
+													panelCreaEmpresas.items.get(0).items.get(1).items.get(2).setFieldLabel('Delegaci&oacute;n');
 												else
-													panelEmpresas.items.get(0).items.get(1).items.get(2).setFieldLabel('Municipio');
+													panelCreaEmpresas.items.get(0).items.get(1).items.get(2).setFieldLabel('Municipio');
 											},
 										});
 										storeMunicipios.load({
@@ -104,8 +104,8 @@ Ext.define('MyDesktop.CreaEmpresas', {
 												// PINTAR EL STORE DEL MUNICIPIO
 												// QUE PONGA EL PRIMER REGISTRO
 												// EN EL COMBO
-												panelEmpresas.items.get(0).items.get(1).items.get(2).clearValue();
-												panelEmpresas.items.get(0).items.get(1).items.get(2).setValue(storeMunicipios.getAt('0').get('id_municipio'));
+												panelCreaEmpresas.items.get(0).items.get(1).items.get(2).clearValue();
+												panelCreaEmpresas.items.get(0).items.get(1).items.get(2).setValue(storeMunicipios.getAt('0').get('id_municipio'));
 											},
 										});
 										storeColonias.load({
@@ -114,7 +114,7 @@ Ext.define('MyDesktop.CreaEmpresas', {
 												filtros : 'INNER JOIN cp ON cp.id_cp = colonias.id_cp WHERE cp.cp =' + this.getValue() + ' ORDER BY colonia'
 											},
 											callback : function(records, operation, success) {
-												panelEmpresas.items.get(0).items.get(0).items.get(3).clearValue();
+												panelCreaEmpresas.items.get(0).items.get(0).items.get(3).clearValue();
 											}
 										});
 										storeCiudades.load({
@@ -123,7 +123,7 @@ Ext.define('MyDesktop.CreaEmpresas', {
 												filtros : 'INNER JOIN cp ON cp.id_cp = ciudades.id_cp WHERE cp.cp=' + this.getValue()
 											},
 											callback : function(records, operation, success) {
-												panelEmpresas.items.get(0).items.get(0).items.get(2).setValue(storeCiudades.getAt('0').get('ciudad'));
+												panelCreaEmpresas.items.get(0).items.get(0).items.get(2).setValue(storeCiudades.getAt('0').get('ciudad'));
 											}
 										});
 									} else {
@@ -150,12 +150,12 @@ Ext.define('MyDesktop.CreaEmpresas', {
 										
 										// LIMPIAMOS LOS VALORES DE TODOS LOS
 										// COMBOS
-										panelEmpresas.items.get(0).items.get(1).items.get(1).clearValue();
-										panelEmpresas.items.get(0).items.get(1).items.get(2).clearValue();
-										panelEmpresas.items.get(0).items.get(0).items.get(3).clearValue();
+										panelCreaEmpresas.items.get(0).items.get(1).items.get(1).clearValue();
+										panelCreaEmpresas.items.get(0).items.get(1).items.get(2).clearValue();
+										panelCreaEmpresas.items.get(0).items.get(0).items.get(3).clearValue();
 										
-										panelEmpresas.items.get(0).items.get(0).items.get(2).setValue('');
-										panelEmpresas.items.get(0).items.get(1).items.get(2).setFieldLabel('Municipio');
+										panelCreaEmpresas.items.get(0).items.get(0).items.get(2).setValue('');
+										panelCreaEmpresas.items.get(0).items.get(1).items.get(2).setFieldLabel('Municipio');
 									}
 //								}//este se comenta
 							}
@@ -191,14 +191,14 @@ Ext.define('MyDesktop.CreaEmpresas', {
 									},
 									callback : function(records, operation, success) {
 										
-										panelEmpresas.items.get(0).items.get(0).items.get(1).setValue(storeCP.getAt('0').get('cp'));
+										panelCreaEmpresas.items.get(0).items.get(0).items.get(1).setValue(storeCP.getAt('0').get('cp'));
 										storeCiudades.load({
 											params : {
 												tabla : 'ciudades',
-												filtros : 'INNER JOIN cp ON cp.id_cp = ciudades.id_cp WHERE cp.cp=' + panelEmpresas.items.get(0).items.get(0).items.get(1).getValue()
+												filtros : 'INNER JOIN cp ON cp.id_cp = ciudades.id_cp WHERE cp.cp=' + panelCreaEmpresas.items.get(0).items.get(0).items.get(1).getValue()
 											},
 											callback : function(records, operation, success) {
-												panelEmpresas.items.get(0).items.get(0).items.get(2).setValue(storeCiudades.getAt('0').get('ciudad'));
+												panelCreaEmpresas.items.get(0).items.get(0).items.get(2).setValue(storeCiudades.getAt('0').get('ciudad'));
 											}
 										});
 									}
@@ -252,16 +252,16 @@ Ext.define('MyDesktop.CreaEmpresas', {
 										filtros : 'WHERE id_estado=' + record[0].get('id_estado') + ' ORDER BY municipio'
 									}
 								});
-								panelEmpresas.items.get(0).items.get(1).items.get(2).clearValue();
-								panelEmpresas.items.get(0).items.get(0).items.get(3).clearValue(); 
-								panelEmpresas.items.get(0).items.get(0).items.get(2).setValue('');
-								panelEmpresas.items.get(0).items.get(0).items.get(1).setValue('');
+								panelCreaEmpresas.items.get(0).items.get(1).items.get(2).clearValue();
+								panelCreaEmpresas.items.get(0).items.get(0).items.get(3).clearValue(); 
+								panelCreaEmpresas.items.get(0).items.get(0).items.get(2).setValue('');
+								panelCreaEmpresas.items.get(0).items.get(0).items.get(1).setValue('');
 								// SI SELECCIONA EL DISTRITO FEDERAL, QUE CAMBIE
 								// LA ETIQUETA DE MUNICIPIO A DELEGACIÓN:
 								if (record[0].get('id_estado') == 9)
-									panelEmpresas.items.get(0).items.get(1).items.get(2).setFieldLabel('Delegaci&oacute;n');
+									panelCreaEmpresas.items.get(0).items.get(1).items.get(2).setFieldLabel('Delegaci&oacute;n');
 								else
-									panelEmpresas.items.get(0).items.get(1).items.get(2).setFieldLabel('Municipio');
+									panelCreaEmpresas.items.get(0).items.get(1).items.get(2).setFieldLabel('Municipio');
 							}
 						}
 					}, {
@@ -291,12 +291,12 @@ Ext.define('MyDesktop.CreaEmpresas', {
 										// DESPUES DE QUE ACABE DE PINTAR EL
 										// STORE DEL COLONIAS QUE PONGA EL
 										// PRIMER REGISTRO EN EL COMBO
-//										panelEmpresas.items.get(0).items.get(0).items.get(3).setValue(storeColonias.getAt('0').get('id_colonia'));
+//										panelCreaEmpresas.items.get(0).items.get(0).items.get(3).setValue(storeColonias.getAt('0').get('id_colonia'));
 									}
 								});
-								panelEmpresas.items.get(0).items.get(0).items.get(3).clearValue();
-								panelEmpresas.items.get(0).items.get(0).items.get(2).setValue('');
-								panelEmpresas.items.get(0).items.get(0).items.get(1).setValue('');
+								panelCreaEmpresas.items.get(0).items.get(0).items.get(3).clearValue();
+								panelCreaEmpresas.items.get(0).items.get(0).items.get(2).setValue('');
+								panelCreaEmpresas.items.get(0).items.get(0).items.get(1).setValue('');
 							}
 						}
 					}, {
@@ -318,9 +318,9 @@ Ext.define('MyDesktop.CreaEmpresas', {
 				}, ],
 			} ]
 		});
-		Ext.define('Writer.Grid', {
+		Ext.define('Writer.GridCreaEmpresas', {
 			extend : 'Ext.grid.Panel',
-			alias : 'widget.writergrid',
+			alias : 'widget.writergridCreaEmpresas',
 			requires : [ 'Ext.form.field.Text', 'Ext.toolbar.TextItem' ],
 			initComponent : function() {
 				Ext.apply(this, {
@@ -448,7 +448,7 @@ Ext.define('MyDesktop.CreaEmpresas', {
 				},
 				// layout : 'fit',
 				defaultType : 'container',
-				items : [ panelEmpresas, 
+				items : [ panelCreaEmpresas, 
 //					{
 //					autoScroll : true,
 //					itemId : 'grid-visualiza-restaurantes',

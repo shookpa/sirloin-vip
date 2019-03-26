@@ -32,26 +32,35 @@ $arrayDatosInsertar ["num_vip"] = $numVip;
 $datosActuales= UtilsVIP::getDataById($arrayDatosInsertar["id"]);
 
 $actualizaPwd="";
-if($datosActuales["password"]!=$arrayDatosInsertar["password"])
-	$actualizaPwd=" password=PASSWORD('".$arrayDatosInsertar["password"]."'), ";
 $idUser=$arrayDatosInsertar ["id"];
-$sql = "UPDATE usuarios SET 
-		 NOMBRE = '".$arrayDatosInsertar["nombre"]."', A_PATERNO = '".$arrayDatosInsertar["a_paterno"]."', A_MATERNO=  '".$arrayDatosInsertar["a_materno"]."', $actualizaPwd   
-		EMAIL='".$arrayDatosInsertar["email"]."', TELEFONO='".$arrayDatosInsertar["telefono"]."', tipoUser='".$arrayDatosInsertar["tipoUser"]."',rol_user='".$arrayDatosInsertar["rol_user"]."',
-		id_empresa='".$arrayDatosInsertar["id_empresa"]."'
-		WHERE id=$idUser";
+//verificamos que no exista ese correo en la tabla de usuarios
+$numReg = num_regmysql ( "SELECT * FROM usuarios WHERE email='" . $arrayDatosInsertar ["email"]. "' AND id<> $idUser" );
 
-// echo $sql;
-traedatosmysql ( $sql );
-
-
-DeleteFisico('rel_usu_rest', "id_usu",$idUser);
-foreach ( $restaurantes as $key => $value ) {
-	// echo "--------$key => $value----------";
-	$arrayDatosInsertarRest ["id_rest"] = $value;
-	$arrayDatosInsertarRest ["id_usu"] = $idUser;
-	InsertTable ( 'rel_usu_rest', $arrayDatosInsertarRest, true );
+if ($numReg > 0)
+	echo '{"success":false, "mensaje":"Este correo ya se encuentra registrado, favor de verificar"}';
+else
+{
+	if($datosActuales["password"]!=$arrayDatosInsertar["password"])
+		$actualizaPwd=" password=PASSWORD('".$arrayDatosInsertar["password"]."'), ";
+	
+	$sql = "UPDATE usuarios SET 
+			 NOMBRE = '".$arrayDatosInsertar["nombre"]."', A_PATERNO = '".$arrayDatosInsertar["a_paterno"]."', A_MATERNO=  '".$arrayDatosInsertar["a_materno"]."', $actualizaPwd   
+			EMAIL='".$arrayDatosInsertar["email"]."', TELEFONO='".$arrayDatosInsertar["telefono"]."', tipoUser='".$arrayDatosInsertar["tipoUser"]."',rol_user='".$arrayDatosInsertar["rol_user"]."',
+			id_empresa='".$arrayDatosInsertar["id_empresa"]."'
+			WHERE id=$idUser";
+	
+	// echo $sql;
+	traedatosmysql ( $sql );
+	
+	
+	DeleteFisico('rel_usu_rest', "id_usu",$idUser);
+	foreach ( $restaurantes as $key => $value ) {
+		// echo "--------$key => $value----------";
+		$arrayDatosInsertarRest ["id_rest"] = $value;
+		$arrayDatosInsertarRest ["id_usu"] = $idUser;
+		InsertTable ( 'rel_usu_rest', $arrayDatosInsertarRest, true );
+	}
+	
+	echo '{"success":true, "mensaje":"El registro del usuario fue exitoso"}';
 }
-
-echo '{"success":true, "mensaje":"El registro del usuario fue exitoso"}';
 ?>

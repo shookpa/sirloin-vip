@@ -32,9 +32,9 @@ Ext
 
 						var win = desktop
 								.getWindow('visualiza-status-sincronizaciones');
-						Ext.define('Writer.Grid', {
+						Ext.define('Writer.GridStatusSincronizaciones', {
 							extend : 'Ext.grid.Panel',
-							alias : 'widget.writergrid',
+							alias : 'widget.writergridStatusSincronizaciones',
 							requires : [
 
 							'Ext.form.field.Text', 'Ext.toolbar.TextItem' ],
@@ -178,7 +178,7 @@ Ext
 													autoScroll : true,
 													itemId : 'grid-visualiza-status-sincronizaciones',
 													id : 'grid-visualiza-status-sincronizaciones',
-													xtype : 'writergrid',
+													xtype : 'writergridStatusSincronizaciones',
 													store : store
 												} ]
 											}).show();

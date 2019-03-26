@@ -23,11 +23,11 @@ Ext.define('MyDesktop.ModificaRoles', {
 			}
 		});
 		var win = desktop.getWindow('modificar-roles');
-		var panelRoles = Ext.create('Ext.form.Panel', {
+		var panelModificaRoles = Ext.create('Ext.form.Panel', {
 			title : '<center>Modificar Rol ' + '</center>',
 			bodyStyle : 'padding:5px',
-			id : 'panelRoles',
-			itemId : 'panelRoles',
+			id : 'panelModificaRoles',
+			itemId : 'panelModificaRoles',
 			border : false,
 			// anchor : '100%',
 			fieldDefaults : {
@@ -80,7 +80,7 @@ Ext.define('MyDesktop.ModificaRoles', {
 				},
 				// layout : 'fit',
 				defaultType : 'container',
-				items : [ panelRoles, 
+				items : [ panelModificaRoles, 
 //					{
 //					autoScroll : true,
 //					itemId : 'grid-visualiza-restaurantes',

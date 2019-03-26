@@ -6,9 +6,9 @@ Ext.require([ 'Ext.grid.*', 'Ext.data.*', 'Ext.form.*', 'Ext.layout.*', 'Ext.tab
 
 // GUARDAMOS EN UN OBJETO LOS PERMISOS GUARDADOS EN EL sessionStorage:
 var perm= JSON.parse(sessionStorage.permisos);
-Ext.define('Writer.Grid', {
+Ext.define('Writer.GridReportes2', {
 	extend : 'Ext.grid.Panel',
-	alias : 'widget.writergrid',
+	alias : 'widget.writergridReportes2',
 	requires : [ 'Ext.form.field.Text', 'Ext.toolbar.TextItem' ],
 	initComponent : function() {
 		Ext.apply(this, {
@@ -201,7 +201,7 @@ Ext.define('Writer.Grid', {
 		
 	},
 	onSync : function() {
-		storeGridMovs.sync();
+		storeGridMovs2.sync();
 	}
 });
 Ext.define('Model.Movimientos', {
@@ -214,7 +214,7 @@ Ext.define('Model.Movimientos', {
 });
 Ext.require([ 'Ext.data.*', 'Ext.tip.QuickTipManager', 'Ext.window.MessageBox' ]);
 Ext.tip.QuickTipManager.init();
-var storeGridMovs = Ext.create('Ext.data.Store', {
+var storeGridMovs2 = Ext.create('Ext.data.Store', {
 	model : 'Model.Movimientos',
 	pageSize: 500,
 	remoteSort: true ,
@@ -280,44 +280,14 @@ Ext.define('MyDesktop.ReportesVIP2', {
 		else
 			var app = aplicacion;
 		var desktop = app.getDesktop();
-		var win = desktop.getWindow('panel-reportes2');
-		var PanelReporteClientes = Ext.create('Ext.form.Panel', {
-			title : '<center>Listado de Clientes VIP</center>',
-			bodyStyle : 'padding:5px',
-			id : 'PanelReporteClientes',
-			border : false,
-			anchor : '100%',
-			fieldDefaults : {
-				labelAlign : 'top',
-				msgTarget : 'side'
-			},
-			layout : 'anchor',
-			items : [ {
-				border : false,
-				defaults : {
-					anchor : '100%'
-				},
-				layout : 'anchor',
-				buttons : [ {
-					text : 'Generar Reporte',
-					tabIndex : 21,
-					href:"php/lib/export_excel_cli_vip_todos.php",
-					params:{},
-					handler : function(btn) {
-//						formulario = this.up('form').getForm();
-//						panelForm = this.up('form');
-//						window.open("php/lib/export_excel_cli_vip_todos.php");
-					}
-				} ]
-			} ]
-		});
+		var win = desktop.getWindow('panel-reportes2');		
 		var idCampo=0;
 		var filtros=[];
-		var PanelReporteMovimientos = Ext.create('Ext.form.Panel', {
+		var PanelReporteMovimientos2 = Ext.create('Ext.form.Panel', {
 			title : '<center>Listado de Movimientos de Tarjetas VIP</center>',
 			bodyStyle : 'padding:5px',
-			itemId : 'pnlReporte',
-			id : 'PanelReporteMovimientos',
+			itemId : 'pnlReporte2',
+			id : 'PanelReporteMovimientos2',
 			border : false,
 			anchor : '100%',
 			fieldDefaults : {
@@ -335,8 +305,8 @@ Ext.define('MyDesktop.ReportesVIP2', {
 					xtype : 'toolbar',
 					items : [ {
 						xtype : 'combobox',
-						itemId : 'campoSeleccionado',
-						name : 'campoSeleccionado',
+						itemId : 'campoSeleccionado2',
+						name : 'campoSeleccionado2',
 						queryMode : 'local',
 						typeAhead : true,						
 						width: 250,
@@ -345,17 +315,17 @@ Ext.define('MyDesktop.ReportesVIP2', {
 						listeners : {
 							change : function(combo, record) {
 								console.debug(combo, record);
-								var panel=combo.up("#pnlReporte");
+								var panel=combo.up("#pnlReporte2");
 //								if (record>0)
-//									panel.down('#btnAgregarCampo').setDisabled(false);
+//									panel.down('#btnAgregarCampo2').setDisabled(false);
 //								else
-//									panel.down('#btnAgregarCampo').setDisabled(true);
+//									panel.down('#btnAgregarCampo2').setDisabled(true);
 							}
 						},
 						emptyText : 'Agregue otro campo de busqueda:',
 						store : Ext.create('Ext.data.Store', {
 							fields : [ 'campo' ],
-							itemId : 'storeCamposFiltro',
+							itemId : 'storeCamposFiltro2',
 							
 							data : [ {
 								"id" : 0,
@@ -389,15 +359,18 @@ Ext.define('MyDesktop.ReportesVIP2', {
 								"campo" : "Por fecha de nacimiento"
 							}, {
 								"id" : 10,
-								"campo" : "Por tipo de movimiento"
+								"campo" : "Por mes de nacimiento"
 							}, {
 								"id" : 11,
-								"campo" : "Por monto de movimiento"
+								"campo" : "Por tipo de movimiento"
 							}, {
 								"id" : 12,
-								"campo" : "Por fecha de movimiento"
+								"campo" : "Por monto de movimiento"
 							}, {
 								"id" : 13,
+								"campo" : "Por fecha de movimiento"
+							}, {
+								"id" : 14,
 								"campo" : "Por Uso de la tarjeta"
 							}  ]
 						}),
@@ -408,7 +381,7 @@ Ext.define('MyDesktop.ReportesVIP2', {
 						iconCls : 'add',
 						text : 'Agregar',
 //						disabled: true,
-						itemId : 'btnAgregarCampo',
+						itemId : 'btnAgregarCampo2',
 						scope : this,
 						handler : function(btn) {
 								idCampo++;
@@ -417,9 +390,9 @@ Ext.define('MyDesktop.ReportesVIP2', {
 								// y tambien eliminar la opción del combo actual
 								// de seleccion del campo
 								console.debug("Por CREAR el campo:"+idCampo);
-								var panel=btn.up("#pnlReporte");
-								var toolbar = panel.down('#toolbarCampos');
-								var campoSel=panel.down('#campoSeleccionado').getValue();
+								var panel=btn.up("#pnlReporte2");
+								var toolbar = panel.down('#toolbarCampos2');
+								var campoSel=panel.down('#campoSeleccionado2').getValue();
 								console.debug("Veamos el campo seleccionado:",campoSel);
 								switch(campoSel) {
 								    case 1:// Por restaurante
@@ -615,7 +588,61 @@ Ext.define('MyDesktop.ReportesVIP2', {
 											format : 'Y-m-d',
 									    	});
 								    break;	
-								    case 10:// Por tipo de movimiento
+								    case 10:	// Por mes de nacimiento
+								    	toolbar.add({
+								    		xtype : 'combobox',
+											name : 'mesNac',
+											fieldLabel: 'Por mes de nacimiento',
+											itemId : 'mesNac',
+											displayField : 'mes',
+											valueField : 'id',
+											forceSelection : true,
+											width: 240,
+											emptyText : 'Seleccione mes de nacimiento',
+											store : Ext.create('Ext.data.Store', {
+												fields : [ 'mes' ],
+												data : [ {
+													"id" : 1,
+													"mes" : "Enero"
+												}, {
+													"id" : 2,
+													"mes" : "Febrero"
+												}, {
+													"id" : 3,
+													"mes" : "Marzo"
+												}, {
+													"id" : 4,
+													"mes" : "Abril"
+												}, {
+													"id" : 5,
+													"mes" : "Mayo"
+												}, {
+													"id" : 6,
+													"mes" : "Junio"
+												}, {
+													"id" : 7,
+													"mes" : "Julio"
+												}, {
+													"id" : 8,
+													"mes" : "Agosto"
+												}, {
+													"id" : 9,
+													"mes" : "Septiembre"
+												}, {
+													"id" : 10,
+													"mes" : "Octubre"
+												}, {
+													"id" : 11,
+													"mes" : "Noviembre"
+												}, {
+													"id" : 12,
+													"mes" : "Diciembre"
+												} ]
+											}),
+									    	});
+									    	
+								    break;	
+								    case 11:// Por tipo de movimiento
 								    	toolbar.add({
 											xtype : 'combobox',
 											itemId : 'tipo_mov',
@@ -644,6 +671,12 @@ Ext.define('MyDesktop.ReportesVIP2', {
 												}, {
 													"id" : 4,
 													"movimiento" : "Registro de tarjeta en sistema web"
+												}, {
+													"id" : 5,
+													"movimiento" : "Modificacion de saldo desde Sistema Web"
+												}, {
+													"id" : 6,
+													"movimiento" : "Vencimiento de puntos"
 												} ]
 											}),
 											displayField : 'movimiento',
@@ -651,7 +684,7 @@ Ext.define('MyDesktop.ReportesVIP2', {
 											forceSelection : true
 										});
 									break;
-								    case 11:// Por monto de movimiento
+								    case 12:// Por monto de movimiento
 								    	toolbar.add({
 											xtype : 'combobox',
 											itemId : 'operMov1',
@@ -739,7 +772,7 @@ Ext.define('MyDesktop.ReportesVIP2', {
 										enableKeyEvents : true,
 									});
 									break;
-								    case 12:// Por fecha de movimiento
+								    case 13:// Por fecha de movimiento
 								    	toolbar.add({
 										xtype : 'datefield',
 										name : 'fechaMovIni',
@@ -761,7 +794,7 @@ Ext.define('MyDesktop.ReportesVIP2', {
 									break;
 									
 									
-								    case 13:// Por uso de la tarjeta
+								    case 14:// Por uso de la tarjeta
 								    	toolbar.add({
 											xtype : 'combobox',
 											itemId : 'operUso',
@@ -856,17 +889,19 @@ Ext.define('MyDesktop.ReportesVIP2', {
 								        
 								    break;
 								}
-								var storeItems = panel.down('#campoSeleccionado').getStore().data.items;
-						    	var storeData = panel.down('#campoSeleccionado').getStore();
-						    	console.debug(storeData.data.length );
-						    	campoSel= campoSel - (13 - storeData.data.length);
-						    	storeItems.forEach( function(item,index){
-						    		
-							    	if(item.data.id==campoSel){
-							    		storeData.removeAt(campoSel);							    		
-							    		panel.down('#campoSeleccionado').setValue(0);
-							    	}
-						    	});
+								var storeItems = panel.down('#campoSeleccionado2').getStore().data.items;
+						    	var storeData = panel.down('#campoSeleccionado2').getStore();
+//						    	Si se agregan filtros de busqueda, el valor de abjo debe corresponder:
+//						    	campoSel= campoSel - (14 - storeData.data.length);
+//						    	storeItems.forEach( function(item,index){
+//						    		
+//							    	if(item.data.id==campoSel){
+//							    		storeData.removeAt(campoSel);							    		
+//							    		panel.down('#campoSeleccionado2').setValue(0);
+//							    	}
+//						    	});
+						    	storeData.removeAt(storeData.indexOfId(campoSel));
+						    	panel.down('#campoSeleccionado2').setValue(0);
 								storeData.sort("id", "ASC");
 								
 														
@@ -882,14 +917,14 @@ Ext.define('MyDesktop.ReportesVIP2', {
 						handler : function(btn) {
 								idCampo--;	
 								console.debug("Por ELIMINAR el campo:"+idCampo);
-								var panel=btn.up("#pnlReporte");
+								var panel=btn.up("#pnlReporte2");
 								// Eliminar el ultimo campo agregado al toolbar
 								// y tambien agregar la opción al combo
-								var toolbar = panel.down('#toolbarCampos'); 
+								var toolbar = panel.down('#toolbarCampos2'); 
 								
 								// verificamos que campo es para agregarlo al
 								// combo:
-								var storeData = panel.down('#campoSeleccionado').getStore();
+								var storeData = panel.down('#campoSeleccionado2').getStore();
 								storeData.removeAll();
 								storeData.add({"id" : 0,"campo" : ""});
 								storeData.add({"id" : 1,"campo" : "Por restaurante"});
@@ -901,11 +936,12 @@ Ext.define('MyDesktop.ReportesVIP2', {
 								storeData.add({"id" : 7,"campo" : "Por email"});
 								storeData.add({"id" : 8,"campo" : "Por Codigo Postal"});								
 								storeData.add({"id" : 9,"campo" : "Por fecha de nacimiento"});
-								storeData.add({"id" : 10,"campo" : "Por tipo de movimiento"});
-								storeData.add({"id" : 11,"campo" : "Por monto de movimiento"});
-								storeData.add({"id" : 12,"campo" : "Por fecha de movimiento"});
-								storeData.add({"id" : 13,"campo" : "Por Uso de la tarjeta"});
-								panel.down('#campoSeleccionado').setValue(0);
+								storeData.add({"id" : 10,"campo" : "Por mes de nacimiento"});
+								storeData.add({"id" : 11,"campo" : "Por tipo de movimiento"});
+								storeData.add({"id" : 12,"campo" : "Por monto de movimiento"});
+								storeData.add({"id" : 13,"campo" : "Por fecha de movimiento"});
+								storeData.add({"id" : 14,"campo" : "Por Uso de la tarjeta"});
+								panel.down('#campoSeleccionado2').setValue(0);
 // var campoEliminar=toolbar.items.items[idCampo].itemId;
 // switch (campoEliminar) {
 // case "restaurante":
@@ -924,7 +960,7 @@ Ext.define('MyDesktop.ReportesVIP2', {
 // toolbar.remove(idCampo);
 								toolbar.removeAll();
 																
-								storeGridMovs.setProxy({
+								storeGridMovs2.setProxy({
 									type : 'ajax',
 									 actionMethods: {
 								          read: 'POST'
@@ -956,7 +992,7 @@ Ext.define('MyDesktop.ReportesVIP2', {
 										}
 									}
 								});
-								storeGridMovs.load();
+								storeGridMovs2.load();
 							
 						}
 						
@@ -969,8 +1005,8 @@ Ext.define('MyDesktop.ReportesVIP2', {
 						scope : this,
 						listeners : {
 							click : function(textfield, eventObjet) {
-								var panel=textfield.up("#pnlReporte");
-								var toolbar = panel.down('#toolbarCampos'); 
+								var panel=textfield.up("#pnlReporte2");
+								var toolbar = panel.down('#toolbarCampos2'); 
 								filtros=[];
 								for (var i = 0; i < toolbar.items.items.length; i++) {
 									console.debug("Toolbar items:",toolbar.items.items[i].itemId,toolbar.items.items[i].value);
@@ -1006,11 +1042,11 @@ Ext.define('MyDesktop.ReportesVIP2', {
 								if (toolbar.items.items.length>0)
 								{
 									//que primero que limpie la busqueda que tien actualmente
-									if(storeGridMovs.currentPage>1)
-										storeGridMovs.loadPage(1); 
-//									storeGridMovs.load();
+									if(storeGridMovs2.currentPage>1)
+										storeGridMovs2.loadPage(1); 
+//									storeGridMovs2.load();
 									//y despues que vuelva a buscar
-									storeGridMovs.setProxy({
+									storeGridMovs2.setProxy({
 										type : 'ajax',
 										 actionMethods: {
 									          read: 'POST'
@@ -1047,7 +1083,7 @@ Ext.define('MyDesktop.ReportesVIP2', {
 										}
 									});
 								}
-									storeGridMovs.load();
+									storeGridMovs2.load();
 								
 							}
 						}
@@ -1055,21 +1091,21 @@ Ext.define('MyDesktop.ReportesVIP2', {
 					} ]
 				}, {
 					xtype : 'toolbar',
-					itemId : 'toolbarCampos',
+					itemId : 'toolbarCampos2',
 					  enableOverflow: true,
 					  dock: 'top',
 					
 				} ],
 				items : [ {
-					itemId : 'gridMovimientos',
-					id : 'gridMovimientos',
-					xtype : 'writergrid',
+					itemId : 'gridMovimientos2',
+					id : 'gridMovimientos2',
+					xtype : 'writergridReportes2',
 					selModel : selModel,
 					height : 400,
-					store : storeGridMovs,
+					store : storeGridMovs2,
 					 dockedItems: [{
 					        xtype: 'pagingtoolbar',
-					        store: storeGridMovs,   // same store GridPanel is
+					        store: storeGridMovs2,   // same store GridPanel is
 													// using
 					        dock: 'bottom',
 					        displayInfo: true
@@ -1121,7 +1157,7 @@ Ext.define('MyDesktop.ReportesVIP2', {
 		
 		if (!win) {
 			win = desktop.createWindow({
-				id : 'panel-reportes2',
+				id : 'panel-reportes2', 
 				title : 'Modulo de Reportes',
 				width :  1500,
 				height :600,
@@ -1149,11 +1185,14 @@ Ext.define('MyDesktop.ReportesVIP2', {
 						title : 'Listado de Tarjetas VIP',
 						header : false,
 						border : false,
-						items : [ PanelReporteMovimientos ]
+						items : [ PanelReporteMovimientos2 ]
 					} ]
 				} ]
 			}).show();
 		}
+//		console.debug("veamos si esta reconociendo el boton:",PanelReporteMovimientos2.down("#btnEliminarCampo"));
+		PanelReporteMovimientos2.down("#btnEliminarCampo").fireHandler("click");
 		return win;
+		
 	}
 });

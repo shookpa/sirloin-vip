@@ -408,21 +408,21 @@
                             </div>
 								<!-- =====*===== Campo Correo electrónico  =====*===== -->
 	                                <div class="col-md-3">
-                            			<p align="right">Correo-e: <span class="text-danger">*</span></p>
+                            			<p align="right">Correo-e:</p>
                                     </div>    
 	                                <div class="col-md-9">
 	                                    <div class="form-group">
-	                                        <input id="Register_TbxEmail" type="text" name="Register_TbxEmail" placeholder="Correo-e *" required data-error="Correo-e es requerido.">
+	                                        <input id="Register_TbxEmail" readonly="true" type="text" style="background: white;" name="Register_TbxEmail" placeholder="Usuario/Correo-e" data-error="Correo-e es requerido.">
 	                                        <div class="help-block with-errors"></div>
 	                                    </div>
 	                                </div>
 								<!-- =====*===== Campo confirmación de Correo electrónico  =====*===== -->
 	                                <div class="col-md-3">
-                            			<p align="right">Confirmación de correo-e: <span class="text-danger">*</span></p>
+                            			<p align="right">Confirmación de correo-e: </p>
                                     </div>    
 	                                <div class="col-md-9">
 	                                    <div class="form-group">
-	                                        <input id="Register_TbxConfirmEmail" type="text" name="Register_TbxConfirmEmail" placeholder="Confirmación de correo-e *" required data-error="Correo-e es requerido.">
+	                                        <input id="Register_TbxConfirmEmail" readonly="true" type="text" style="background: white;" name="Register_TbxConfirmEmail" placeholder="Confirmación de correo-e" data-error="Correo-e es requerido.">
 	                                        <div class="help-block with-errors"></div>
 	                                    </div>
 	                                </div>

@@ -52,9 +52,9 @@ Ext.define('MyDesktop.ModificaUsuarios', {
 				tabla : 'cat_empresas'
 			}
 		});
-		Ext.define('Writer.Grid', {
+		Ext.define('Writer.GridModificaUsuarios', {
 			extend : 'Ext.grid.Panel',
-			alias : 'widget.writergrid',
+			alias : 'widget.writergridModificaUsuarios',
 			requires : [ 'Ext.form.field.Text', 'Ext.toolbar.TextItem' ],
 			initComponent : function() {
 				Ext.apply(this, {
@@ -152,11 +152,11 @@ Ext.define('MyDesktop.ModificaUsuarios', {
 			}
 		});
 		var win = desktop.getWindow('modificar-usuarios');
-		var panelUsuarios = Ext.create('Ext.form.Panel', {
+		var panelModificaUsuarios = Ext.create('Ext.form.Panel', {
 			title : '<center>Modificar Usuario ' + '</center>',
 			bodyStyle : 'padding:5px',
-			id : 'panelUsuarios',
-			itemId : 'panelUsuarios',
+			id : 'panelModificaUsuarios',
+			itemId : 'panelModificaUsuarios',
 			border : false,
 			// anchor : '100%',
 			fieldDefaults : {
@@ -194,15 +194,15 @@ Ext.define('MyDesktop.ModificaUsuarios', {
 						listeners : {
 							select : function(combo, record) {
 								if (this.getValue() == 1 || this.getValue() == '1') {
-									panelUsuarios.items.get(0).items.get(0).items.get(1).allowBlank = true;
-									panelUsuarios.items.get(0).items.get(1).items.get(0).allowBlank = true;
-									panelUsuarios.items.get(0).items.get(0).items.get(1).setVisible(false);
-									panelUsuarios.items.get(0).items.get(1).items.get(0).setVisible(false);
+									panelModificaUsuarios.items.get(0).items.get(0).items.get(1).allowBlank = true;
+									panelModificaUsuarios.items.get(0).items.get(1).items.get(0).allowBlank = true;
+									panelModificaUsuarios.items.get(0).items.get(0).items.get(1).setVisible(false);
+									panelModificaUsuarios.items.get(0).items.get(1).items.get(0).setVisible(false);
 								} else {
-									panelUsuarios.items.get(0).items.get(0).items.get(1).allowBlank = false;
-									panelUsuarios.items.get(0).items.get(1).items.get(0).allowBlank = false;
-									panelUsuarios.items.get(0).items.get(0).items.get(1).setVisible(true);
-									panelUsuarios.items.get(0).items.get(1).items.get(0).setVisible(true);
+									panelModificaUsuarios.items.get(0).items.get(0).items.get(1).allowBlank = false;
+									panelModificaUsuarios.items.get(0).items.get(1).items.get(0).allowBlank = false;
+									panelModificaUsuarios.items.get(0).items.get(0).items.get(1).setVisible(true);
+									panelModificaUsuarios.items.get(0).items.get(1).items.get(0).setVisible(true);
 								}
 							}
 						}
@@ -375,13 +375,13 @@ Ext.define('MyDesktop.ModificaUsuarios', {
 				},
 				// layout : 'fit',
 				defaultType : 'container',
-				items : [ panelUsuarios, {
+				items : [ panelModificaUsuarios, {
 					autoScroll : true,
 					itemId : 'grid-visualiza-restaurantes',
 					id : 'grid-visualiza-restaurantes',
 					hidden : true,
 					visible : false,
-					xtype : 'writergrid',
+					xtype : 'writergridModificaUsuarios',
 					selModel : selModel,
 					store : store
 				} ],
@@ -436,9 +436,10 @@ Ext.define('MyDesktop.ModificaUsuarios', {
 								},
 								failure : function(form, action) {
 									//
+									var data = Ext.decode(action.response.responseText);
 									Ext.Msg.show({
 										title : 'Problema al salvar',
-										msg : 'Favor de intentar mas tarde',
+										msg : data.mensaje,
 										buttons : Ext.Msg.OK,
 										icon : Ext.Msg.ERROR
 									});
@@ -453,15 +454,15 @@ Ext.define('MyDesktop.ModificaUsuarios', {
 		}
 		//inicializando algunos datos:
 		if (registro.data.tipoUser == 1 ) {
-			panelUsuarios.items.get(0).items.get(0).items.get(1).allowBlank = true;
-			panelUsuarios.items.get(0).items.get(1).items.get(0).allowBlank = true;
-			panelUsuarios.items.get(0).items.get(0).items.get(1).setVisible(false);
-			panelUsuarios.items.get(0).items.get(1).items.get(0).setVisible(false);
+			panelModificaUsuarios.items.get(0).items.get(0).items.get(1).allowBlank = true;
+			panelModificaUsuarios.items.get(0).items.get(1).items.get(0).allowBlank = true;
+			panelModificaUsuarios.items.get(0).items.get(0).items.get(1).setVisible(false);
+			panelModificaUsuarios.items.get(0).items.get(1).items.get(0).setVisible(false);
 		} else {
-			panelUsuarios.items.get(0).items.get(0).items.get(1).allowBlank = false;
-			panelUsuarios.items.get(0).items.get(1).items.get(0).allowBlank = false;
-			panelUsuarios.items.get(0).items.get(0).items.get(1).setVisible(true);
-			panelUsuarios.items.get(0).items.get(1).items.get(0).setVisible(true);
+			panelModificaUsuarios.items.get(0).items.get(0).items.get(1).allowBlank = false;
+			panelModificaUsuarios.items.get(0).items.get(1).items.get(0).allowBlank = false;
+			panelModificaUsuarios.items.get(0).items.get(0).items.get(1).setVisible(true);
+			panelModificaUsuarios.items.get(0).items.get(1).items.get(0).setVisible(true);
 			//mostramos el panel de restaurantes conforme la empresa seleccionada:
 			store.setProxy({
 				type : 'ajax',
@@ -501,7 +502,8 @@ Ext.define('MyDesktop.ModificaUsuarios', {
 				            		var actuales= Ext.decode(resp.responseText);
 									Ext.each(actuales.datos, function(item) {
 										Ext.each(selModel.store.data.items, function(itemGrid) {
-											if(itemGrid.data.id==item.id_rest)
+											
+											if(itemGrid.data.id_restaurante==item.id_rest)
 												selModel.select(itemGrid.index, true);
 										});
 									});
@@ -517,7 +519,14 @@ Ext.define('MyDesktop.ModificaUsuarios', {
 			
 			
 		}
-		
+		var tip = Ext.create('Ext.tip.ToolTip', {
+		    target: panelModificaUsuarios.items.get(0).items.get(0).items.get(0).id,
+		    html: 'El tipo de usuario permite seleccionar si es un administrador <br> con todos los permisos, o un administrador con ciertos privilegios'
+		});
+		var tip2 = Ext.create('Ext.tip.ToolTip', {
+		    target: panelModificaUsuarios.items.get(0).items.get(0).items.get(1).id,
+		    html: 'Dependiendo del rol seleccionado se le asignaran <br> los permisos de acceso en los modulos del sistema'
+		});
 		
 		return win;
 	}

@@ -23,10 +23,10 @@ Ext.define('MyDesktop.CreaPromociones', {
 			},
 			fileUploadText : 'La foto debe ser con alguna de las siguientes extensiones: .gif,.png,.bmp,.jpg,.jpeg '
 		});
-		var panelPromociones = Ext.create('Ext.form.Panel', {
+		var panelCreaPromociones = Ext.create('Ext.form.Panel', {
 			title : '<center>Datos de la Noticia</center>',
 			bodyStyle : 'padding:5px',
-			id : 'panelPromociones',
+			id : 'panelCreaPromociones',
 			border : false,
 			anchor : '100%',
 			fieldDefaults : {
@@ -136,7 +136,7 @@ Ext.define('MyDesktop.CreaPromociones', {
 				},
 				layout : 'fit',
 				defaultType : 'container',
-				items : panelPromociones
+				items : panelCreaPromociones
 			}).show();
 		}
 		return win;

@@ -2,7 +2,7 @@ Ext.Loader.setPath('Ext.ux', 'extjs/examples/ux');
 Ext.define('MyDesktop.AsociaSucursalesAEmpresas', {
 	extend : 'Ext.ux.desktop.Module',
 	requires : [ 'Ext.tab.Panel', 'Ext.chart.*', 'Ext.layout.container.Fit', 'Ext.fx.target.Sprite', 'Ext.selection.CheckboxModel' ],
-	id : 'crear-empresas',
+	id : 'asociar-sucursales',
 	init : function() {
 		this.launcher = {
 			text : 'Asociar Sucursales a Empresas',

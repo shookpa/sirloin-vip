@@ -14,6 +14,8 @@ function conectamysql($fetchas="ARRAY",$host,$useri,$pwd,$base)
 	$db = &ADONewConnection('mysql');
 	//$db->debug = true;	
 	$db->Connect($host, $useri,$pwd,$base);	
+	mysqli_query("SET NAMES 'utf8'");
+	
 	if($fetchas == "HASH")
 	{	
 		$db->SetFetchMode(ADODB_FETCH_ASSOC);

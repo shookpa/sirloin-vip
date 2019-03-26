@@ -10,6 +10,9 @@ var theForm = document.forms['form1'];
 if (!theForm) {
 	theForm = document.form1;
 }
+function minus(e) {
+    e.value = e.value.toLowerCase();
+}
 var restaurante=0;
 function __doPostBack(eventTarget) {
 	console.debug("---------------------ENTRO A:", eventTarget);

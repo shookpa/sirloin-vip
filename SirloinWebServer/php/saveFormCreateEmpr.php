@@ -28,7 +28,7 @@ $arrayDatosInsertar = $arrayDatosInsertar2;
 	InsertTable('cat_empresas', $arrayDatosInsertar,true);
 	//SI NO ESTA DUPLICADA, PROCEDEMOS A REGISTRAR LA TARJETA EN LA TABLA DE USUARIOS:
 	
-	$idGenerado=mysql_insert_id();
+	$idGenerado=mysqli_insert_id();
 	foreach ( $restaurantes as $key => $value ) {
 // 			echo "--------$key => $value----------";
 		$arrayDatosInsertarRest["id_rest"]=$value;

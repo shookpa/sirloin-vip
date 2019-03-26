@@ -30,19 +30,28 @@ if (! ($arrayDatosInsertar ["id_empresa"] >= 1))
 	$arrayDatosInsertar ["id_empresa"] = 0;
 $arrayDatosInsertar ["num_vip"] = $numVip;
 $arrayDatosInsertar ["password"] = "PASSWORD('" . $arrayDatosInsertar ["password"] . "')";
-$sql = utf8_decode("INSERT INTO usuarios ( NOMBRE, A_PATERNO, A_MATERNO, USER, NUM_VIP, PASSWORD, EMAIL, TELEFONO, CP, DIA_NAC, MES_NAC, YEAR_NAC, GENERO, tipoUser,rol_user,id_empresa, status ) VALUES 
-		( '" . $arrayDatosInsertar ["nombre"] . "', '" . $arrayDatosInsertar ["a_paterno"] . "', '" . $arrayDatosInsertar ["a_materno"] . "', '" . $arrayDatosInsertar ["user"] . "', 
-		0, " . $arrayDatosInsertar ["password"] . ", '" . $arrayDatosInsertar ["email"] . "', '" . $arrayDatosInsertar ["telefono"] . "', '" . $arrayDatosInsertar ["cp"] . "', 
-		0, 0, 0, " . $arrayDatosInsertar ["genero"] . ", " . $arrayDatosInsertar ["tipoUser"] . ", " . $arrayDatosInsertar ["rol_user"] . ", " . $arrayDatosInsertar ["id_empresa"] . ", '1' )");
-// echo $sql;
-traedatosmysql ( $sql );
-$idGenerado = mysql_insert_id ();
-foreach ( $restaurantes as $key => $value ) {
-	// echo "--------$key => $value----------";
-	$arrayDatosInsertarRest ["id_rest"] = $value;
-	$arrayDatosInsertarRest ["id_usu"] = $idGenerado;
-	InsertTable ( 'rel_usu_rest', $arrayDatosInsertarRest, true );
-}
+//verificamos que no exista ese correo en la tabla de usuarios
+$numReg = num_regmysql ( "SELECT * FROM usuarios WHERE email='" . $arrayDatosInsertar ["email"]. "'" );
 
-echo '{"success":true, "mensaje":"El registro del usuario fue exitoso"}';
+if ($numReg > 0)
+	echo '{"success":false, "mensaje":"Este correo ya se encuentra registrado, favor de verificar"}';
+else
+{
+
+	$sql = utf8_decode("INSERT INTO usuarios ( NOMBRE, A_PATERNO, A_MATERNO, USER, NUM_VIP, PASSWORD, EMAIL, TELEFONO, CP, DIA_NAC, MES_NAC, YEAR_NAC, GENERO, tipoUser,rol_user,id_empresa, status ) VALUES 
+			( '" . $arrayDatosInsertar ["nombre"] . "', '" . $arrayDatosInsertar ["a_paterno"] . "', '" . $arrayDatosInsertar ["a_materno"] . "', '" . $arrayDatosInsertar ["user"] . "', 
+			0, " . $arrayDatosInsertar ["password"] . ", '" . $arrayDatosInsertar ["email"] . "', '" . $arrayDatosInsertar ["telefono"] . "', '" . $arrayDatosInsertar ["cp"] . "', 
+			0, 0, 0, " . $arrayDatosInsertar ["genero"] . ", " . $arrayDatosInsertar ["tipoUser"] . ", " . $arrayDatosInsertar ["rol_user"] . ", " . $arrayDatosInsertar ["id_empresa"] . ", '1' )");
+	// echo $sql;
+	traedatosmysql ( $sql );
+	$idGenerado = mysqli_insert_id();
+	foreach ( $restaurantes as $key => $value ) {
+		// echo "--------$key => $value----------";
+		$arrayDatosInsertarRest ["id_rest"] = $value;
+		$arrayDatosInsertarRest ["id_usu"] = $idGenerado;
+		InsertTable ( 'rel_usu_rest', $arrayDatosInsertarRest, true );
+	}
+	
+	echo '{"success":true, "mensaje":"El registro del usuario fue exitoso"}';
+}
 ?>

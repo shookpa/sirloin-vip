@@ -82,7 +82,7 @@ Ext.define('MyDesktop.ModificarSaldo', {
 		        		xtype: 'textfield',	   
 		        	 	queryMode: 'local',
 		        	 	allowBlank: false,
-		        		value: seleccion.mon_vip,
+		        		value: seleccion.pto_vip,
 		        		maskRe: /[0-9.]/,
 		        	 	name: 'saldo',
 			            typeAhead: true,
