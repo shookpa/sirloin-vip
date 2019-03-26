@@ -185,13 +185,13 @@ Ext.define('Writer.Grid', {
 		
 		if(perm!=null )
 		{
-			this.up().up().down('#sendPromotion').setDisabled(selections.length === 0 || !perm.some(item => item.id_permiso == '3' && item.per_func5 == "1"));
+//			this.up().up().down('#sendPromotion').setDisabled(selections.length === 0 || !perm.some(item => item.id_permiso == '3' && item.per_func5 == "1"));
 // this.up().up().down('#modifyBalance').setDisabled(!(selections.length == 1)
 // || !perm.some(item => item.id_permiso == '3' && item.per_func6 == "1"));
 		}
 		else
 		{
-			this.up().up().down('#sendPromotion').setDisabled(selections.length === 0);
+//			this.up().up().down('#sendPromotion').setDisabled(selections.length === 0);
 // this.up().up().down('#modifyBalance').setDisabled(!(selections.length == 1));
 		}
 		
@@ -1073,36 +1073,38 @@ Ext.define('MyDesktop.ReportesVIP', {
 //						panelForm = this.up('form');
 //						window.open("php/lib/export_excel_cli_vip_todos.php");
 					}
-				},{
-					text : 'Enviar Promoción',
-					tabIndex : 21,
-					disabled:true,
-					itemId : 'sendPromotion',
-					handler : function(btn) {
-						var s = selModel.getSelection();
-						// And then you can iterate over the selected items,
-						// e.g.:
-						selected = [];
-						Ext.each(s, function(item) {
-							if(item.data.ema_vip!=null && item.data.ema_vip!="" && !selected.includes(item.data.ema_vip))
-								selected.push(item.data.ema_vip);
-						});
-						console.debug(selected);
-						modulo = new MyDesktop.EnviaPromociones();
-						var window = modulo.createWindow(app, selected);
-						window.show();
-						// Ext.MessageBox.show({
-						// title : 'ENVIO DE PROMOCIONES EN DESARROLLO',
-						// msg : "Enviará correos a
-						// "+selModel.getSelection().length+" clientes",
-						// icon : Ext.MessageBox.INFO,
-						// buttons : Ext.Msg.OK
-						// });
-						// formulario = this.up('form').getForm();
-						// panelForm = this.up('form');
-						// window.open("php/lib/export_excel_cli_vip_todos.php");
-					}
-				} ]
+				}
+//				,{
+//					text : 'Enviar Promoción',
+//					tabIndex : 21,
+//					disabled:true,
+//					itemId : 'sendPromotion',
+//					handler : function(btn) {
+//						var s = selModel.getSelection();
+//						// And then you can iterate over the selected items,
+//						// e.g.:
+//						selected = [];
+//						Ext.each(s, function(item) {
+//							if(item.data.ema_vip!=null && item.data.ema_vip!="" && !selected.includes(item.data.ema_vip))
+//								selected.push(item.data.ema_vip);
+//						});
+//						console.debug(selected);
+//						modulo = new MyDesktop.EnviaPromociones();
+//						var window = modulo.createWindow(app, selected);
+//						window.show();
+//						// Ext.MessageBox.show({
+//						// title : 'ENVIO DE PROMOCIONES EN DESARROLLO',
+//						// msg : "Enviará correos a
+//						// "+selModel.getSelection().length+" clientes",
+//						// icon : Ext.MessageBox.INFO,
+//						// buttons : Ext.Msg.OK
+//						// });
+//						// formulario = this.up('form').getForm();
+//						// panelForm = this.up('form');
+//						// window.open("php/lib/export_excel_cli_vip_todos.php");
+//					}
+//				} 
+				]
 			} ]
 		});
 		
