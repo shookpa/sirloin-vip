@@ -1,0 +1,3 @@
+##AddHandler cgi-php5 .php
+php_value default_charset Off
+AddDefaultCharset ISO-8859-1
