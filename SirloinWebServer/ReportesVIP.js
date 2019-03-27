@@ -915,11 +915,6 @@ Ext.define('MyDesktop.ReportesVIP', {
 //						    	});
 						    	storeData.removeAt(storeData.indexOfId(campoSel));
 						    	panel.down('#campoSeleccionado').setValue(0);
-						    	
-						    	
-						    	
-						    	
-						    	
 								storeData.sort("id", "ASC");
 								
 								Ext.resumeLayouts(true);							
