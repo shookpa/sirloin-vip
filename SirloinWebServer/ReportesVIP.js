@@ -1154,7 +1154,7 @@ Ext.define('MyDesktop.ReportesVIP', {
 						selected = [];
 						Ext.each(s, function(item) {
 
-								selected.push(item.internalId);
+								selected.push(item.data.num_vip);
 						});
 						console.debug("selected:",selected);
 						var panel=btn.up("#pnlReporte");

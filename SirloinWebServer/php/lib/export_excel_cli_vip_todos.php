@@ -14,6 +14,7 @@ setLastModifiedBy ( "Jorge Centeno" )-> // Ultimo usuario que lo modificó
 setTitle ( "Reporte Excel con PHP y MySQL" )->setSubject ( "Reporte Excel con PHP y MySQL" )->setDescription ( $nombreArchivo )->setKeywords ( $nombreArchivo )->setCategory ( $nombreArchivo );
 $arrayDatosInsertar =  json_decode ( str_replace("\\", "", $_REQUEST ["data"]), true );
 $seleccion="";
+$seleccionados= array();
 foreach ( $arrayDatosInsertar as $key => $value ) {
 
 	if ($key=="seleccionados") {
@@ -29,9 +30,9 @@ foreach ( $arrayDatosInsertar as $key => $value ) {
 		$arrayDatosInsertar2 [$key] = html_entity_decode ( preg_replace ( "/\\\\u([0-9abcdef]{4})/", "&#x$1;", trim ( $value ) ) );
 }
 $muestraMovs = false;
-if ($seleccion!="") {
+if ($seleccion!="" &&  sizeof($seleccionados)<501) {
 	$seleccion=substr($seleccion, 0,strlen($seleccion)-1);	
- 	$condSeleccionados = "AND clientes_vip.id IN ( $seleccion)";
+ 	$condSeleccionados = "AND clientes_vip.num_vip IN ( $seleccion)";
 }
 if (isset ( $arrayDatosInsertar ["tarjeta"] )) {
 	$tarjeta = $arrayDatosInsertar ["tarjeta"];
@@ -108,6 +109,12 @@ if (isset ( $arrayDatosInsertar ["tipo_mov"] )) {
 		case 4 :
 			$condTipoMov = "AND mov_vip.det_vip= 'Registro de tarjeta en sistema web'";
 			break;
+		case 5 :
+			$condTipoMov = "AND mov_vip.det_vip LIKE '%desde Sistema Web'";
+			break;
+		case 6 :
+			$condTipoMov = "AND mov_vip.det_vip= 'Vencimiento de puntos'";
+			break;
 		default :
 			;
 			break;
@@ -130,7 +137,10 @@ if (isset ( $arrayDatosInsertar ["operMov1"] )) {
 }
 
 if ($_SESSION ["s_tipoUser"] == "3")
-	$condRest .= " AND cat_restaurantes.id_restaurante IN (" . $_SESSION ["s_rest"] . ")";
+	if ($_SESSION ["s_rest"]!="false" && $_SESSION ["s_rest"]!=false)
+		$condRest .= " AND cat_restaurantes.id_restaurante IN (" . $_SESSION ["s_rest"] . ")";
+	else
+		$condRest .= " AND cat_restaurantes.id_restaurante IN (0)";
 
 if (isset ( $arrayDatosInsertar ["operUso"] )) {
 	$operUso = $arrayDatosInsertar ["operUso"];
@@ -233,7 +243,7 @@ $titulosColumnas = array (
 );
 $objPHPExcel->setActiveSheetIndex ( 0 )->mergeCells ( 'A1:Q1' );
 // Se agregan los titulos del reporte
-$objPHPExcel->setActiveSheetIndex ( 0 )->setCellValue ( 'A1', $nombreArchivo )->setCellValue ( 'A3', $titulosColumnas [0] )->setCellValue ( 'B3', $titulosColumnas [1] )->setCellValue ( 'C3', $titulosColumnas [2] )->setCellValue ( 'D3', $titulosColumnas [3] )->setCellValue ( 'E3', $titulosColumnas [4] )->setCellValue ( 'F3', $titulosColumnas [5] )->setCellValue ( 'G3', $titulosColumnas [6] )->setCellValue ( 'H3', $titulosColumnas [7] )->setCellValue ( 'I3', $titulosColumnas [8] )->setCellValue ( 'J3', $titulosColumnas [9] )->setCellValue ( 'K3', $titulosColumnas [10] )->setCellValue ( 'L3', $titulosColumnas [11] )->setCellValue ( 'M3', $titulosColumnas [12] )->setCellValue ( 'N3', $titulosColumnas [13] )->setCellValue ( 'O3', $titulosColumnas [14] )->setCellValue ( 'P3', $titulosColumnas [15] );
+$objPHPExcel->setActiveSheetIndex ( 0 )->setCellValue ( 'A1', $nombreArchivo." SELECCIONADOS:".sizeof($seleccionados))->setCellValue ( 'A3', $titulosColumnas [0] )->setCellValue ( 'B3', $titulosColumnas [1] )->setCellValue ( 'C3', $titulosColumnas [2] )->setCellValue ( 'D3', $titulosColumnas [3] )->setCellValue ( 'E3', $titulosColumnas [4] )->setCellValue ( 'F3', $titulosColumnas [5] )->setCellValue ( 'G3', $titulosColumnas [6] )->setCellValue ( 'H3', $titulosColumnas [7] )->setCellValue ( 'I3', $titulosColumnas [8] )->setCellValue ( 'J3', $titulosColumnas [9] )->setCellValue ( 'K3', $titulosColumnas [10] )->setCellValue ( 'L3', $titulosColumnas [11] )->setCellValue ( 'M3', $titulosColumnas [12] )->setCellValue ( 'N3', $titulosColumnas [13] )->setCellValue ( 'O3', $titulosColumnas [14] )->setCellValue ( 'P3', $titulosColumnas [15] );
 // Se agregan los datos de los alumnos
 $i = 4;
 $rsdDatos = traedatosmysql ( $sql );
