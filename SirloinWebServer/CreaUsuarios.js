@@ -24,7 +24,31 @@ Ext.define('MyDesktop.CreaUsuarios', {
 				}
 			}
 		});
-		var storeRoles = aplicacion.deepCloneStore(aplicacion.storeRoles);
+		
+		Ext.define('ModelRoles', {
+            extend: 'Ext.data.Model',
+            fields: [
+                {name:'id_rol', type:'int'},              
+                {name:'nombre_rol', type:'string'}
+            ]
+        });
+		var storeRoles = Ext.create('Ext.data.Store', {
+        	model: 'ModelRoles',    
+	        proxy: {	            
+	            type: 'ajax',
+	            url: 'php/cargaCombos.php',		            
+	            reader: {
+	                root: 'datos'
+	            }
+	        }
+        });
+        
+        storeRoles.load({
+            params: {
+            	tabla: 'cat_roles',
+            	filtros: 'WHERE status=1'
+            }
+        });
 		Ext.define('ModelEmpresa', {
             extend: 'Ext.data.Model',
             fields: [

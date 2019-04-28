@@ -88,7 +88,7 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																				{
 																					iconCls : 'add',
 																					text : 'Agregar Usuario',
-																					disabled: perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func7 == "1"),
+																					disabled: perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func8 == "1"),
 																					itemId : 'newUser',
 																					scope : this,																					
 																					handler : this.onNewUserClick
@@ -96,7 +96,7 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																				{
 																					iconCls : 'edit',
 																					text : 'Modificar Usuario',
-																					disabled: perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func8 == "1"),
+																					disabled: perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func9 == "1"),
 																					itemId : 'editUser',
 																					scope : this,																					
 																					handler : this.onEditUserClick
@@ -104,7 +104,7 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																				{
 																					iconCls : 'remove',
 																					text : 'Eliminar Usuario',
-																					disabled: perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func9 == "1"),
+																					disabled: perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func10 == "1"),
 																					itemId : 'deleteUser',
 																					scope : this,																					
 																					handler : this.onDeleteUserClick
@@ -169,13 +169,14 @@ Ext.define('MyDesktop.AdministraUsuarios',
 											},
 											onSelectChange : function(selModel,
 													selections) {
+												if (!(perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func10 == "1")))
 												 this.down('#deleteUser').setDisabled(selections.length === 0);
 // this.down('#editClient').setDisabled(selections.length === 0);
 // this.down('#newContact').setDisabled(selections.length === 0);
 												// this.down('#enviar').setDisabled(selections.length
 												// === 0);
-												 this.down('#editUser').setDisabled(selections.length
-												 === 0);
+												if (!(perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func9 == "1")))
+												 this.down('#editUser').setDisabled(selections.length === 0);
 												// this.down('#createSolicitud').setDisabled(selections.length
 												// === 0);
 
@@ -597,7 +598,7 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																				{
 																					iconCls : 'add',
 																					text : 'Agregar Rol',
-																					disabled: perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func10 == "1"),
+																					disabled: perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func11 == "1"),
 																					itemId : 'newSuc',
 																					scope : this,																					
 																					handler : this.onNewRolClick
@@ -613,9 +614,10 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																				{
 																					iconCls : 'edit',
 																					text : 'Modificar Rol',
+																					
 // disabled: perm!=null && !perm.some(item => item.id_permiso == '1' &&
 // item.per_func11 == "1"),
-																					disabled: true,
+																					disabled: perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func12 == "1"),
 																					itemId : 'editRol',
 																					scope : this,																					
 																					handler : this.onEditRolClick
@@ -625,7 +627,7 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																					text : 'Eliminar Rol',
 // disabled: perm!=null && !perm.some(item => item.id_permiso == '1' &&
 // item.per_func12 == "1"),
-																					disabled: true,
+																					disabled: perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func13 == "1"),
 																					itemId : 'deleteRol',
 																					scope : this,																				
 																					handler : this.onDeleteRolClick
@@ -660,7 +662,7 @@ Ext.define('MyDesktop.AdministraUsuarios',
 													selections) {
 												if (selections.length != 0)
 												{
-													if (!(perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func11 == "1")))
+													if (!(perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func12 == "1")))
 													{
 
 														 this.down('#editRol').setDisabled(selections.length === 0);
@@ -702,7 +704,7 @@ Ext.define('MyDesktop.AdministraUsuarios',
 															});
 														 storePermisos.load();
 													}
-													if (!(perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func12 == "1")))
+													if (!(perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func13 == "1")))
 													{
 
 														 this.down('#deleteRol').setDisabled(selections.length === 0);
@@ -1594,7 +1596,7 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																				{
 																					iconCls : 'add',
 																					text : 'Asociar Sucursal',
-																					disabled: perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func5 == "1"),
+																					disabled: perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func7 == "1"),
 																					itemId : 'asociaSuc',																					
 																					scope : this,																					
 																					handler : this.onAsociaSucClick
@@ -1668,7 +1670,8 @@ Ext.define('MyDesktop.AdministraUsuarios',
 												
 // this.down('#deleteEmp').setDisabled(selections.length === 0);
 // this.down('#editEmp').setDisabled(selections.length === 0);
-												this.down('#asociaSuc').setDisabled(selections.length === 0);
+												if (!(perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func7 == "1")))
+													this.down('#asociaSuc').setDisabled(selections.length === 0);
 												
 
 											},

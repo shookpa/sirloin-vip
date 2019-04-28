@@ -194,18 +194,7 @@ Ext.define('Writer.GridReportes', {
 			this.up().up().down('#exportExcel').setText("Exportar Seleccionados a Excel") 
 		else
 			this.up().up().down('#exportExcel').setText("Exportar todo a Excel");
-		if(perm!=null )
-		{
-//			this.up().up().down('#sendPromotion').setDisabled(selections.length === 0 || !perm.some(item => item.id_permiso == '3' && item.per_func5 == "1"));
-			this.up().up().down('#modifyBalance').setDisabled(!(selections.length == 1));
-// || !perm.some(item => item.id_permiso == '3' && item.per_func6 == "1"));
-		}
-		else
-		{
-//			this.up().up().down('#sendPromotion').setDisabled(selections.length === 0);
-			this.up().up().down('#modifyBalance').setDisabled(!(selections.length == 1));
-		}
-		 
+		
 		
 		
 	},
@@ -924,7 +913,7 @@ Ext.define('MyDesktop.ReportesVIP', {
 					},{
 						iconCls : 'remove',
 						text : 'Limpiar campos de búsqueda',
-						disabled: perm!=null && (!perm.some(item => item.id_permiso == '3' && item.per_func2 == "1") && perm.some(item => item.id_permiso == '3' && item.per_func1 == "1")),
+//						disabled: perm!=null && (!perm.some(item => item.id_permiso == '3' && item.per_func2 == "1") && perm.some(item => item.id_permiso == '3' && item.per_func1 == "1")),
 						itemId : 'btnEliminarCampo',
 						scope : this,
 						handler : function(btn) {
@@ -1013,7 +1002,7 @@ Ext.define('MyDesktop.ReportesVIP', {
 					{
 						iconCls : 'icon-find1',
 						text : 'Buscar',
-						disabled: perm!=null && (!perm.some(item => item.id_permiso == '3' && item.per_func2 == "1") && perm.some(item => item.id_permiso == '3' && item.per_func1 == "1")),
+//						disabled: perm!=null && (!perm.some(item => item.id_permiso == '3' && item.per_func2 == "1") && perm.some(item => item.id_permiso == '3' && item.per_func1 == "1")),
 						itemId : 'btnBuscar',
 						scope : this,
 						listeners : {
@@ -1153,7 +1142,7 @@ Ext.define('MyDesktop.ReportesVIP', {
 				{
 					text : 'Exportar todo a Excel',
 					tabIndex : 21,
-					disabled: perm!=null && !perm.some(item => item.id_permiso == '3' && item.per_func3 == "1"),
+					disabled: perm!=null && !perm.some(item => item.id_permiso == '3' && item.per_func1 == "1"),
 					method      : 'POST',
 					itemId : 'exportExcel',
 //				    href         : 'php/lib/test_excel_params.php',
@@ -1195,72 +1184,8 @@ Ext.define('MyDesktop.ReportesVIP', {
 							}
 						});
 						console.debug("------------------Ya mando los filtros al BOTON----------");
-//						formulario = this.up('form').getForm();
-//						panelForm = this.up('form');
-//						window.open("php/lib/export_excel_cli_vip_todos.php");
 					}
-				}, {
-					text : 'Modificar Puntos',
-					tabIndex : 21,
-					disabled:true,
-					itemId : 'modifyBalance',
-					handler : function(btn) {
-						
-						var selection = selModel.getSelection()[0];
-						// And then you can iterate over the selected items,
-						// e.g.:
-//						selected = [];
-//						Ext.each(s, function(item) {
-//							if(item.data.ema_vip!=null && item.data.ema_vip!="" && !selected.includes(item.data.ema_vip))
-//								selected.push(item.data.ema_vip);
-//						});
-						modulo = new MyDesktop.ModificarSaldo();
-						console.debug("veamos la seleccion",selection.data);
-						var window = modulo.createWindow(app, selection.data);
-						window.show();
-						// Ext.MessageBox.show({
-						// title : 'ENVIO DE PROMOCIONES EN DESARROLLO',
-						// msg : "Enviará correos a
-						// "+selModel.getSelection().length+" clientes",
-						// icon : Ext.MessageBox.INFO,
-						// buttons : Ext.Msg.OK
-						// });
-						// formulario = this.up('form').getForm();
-						// panelForm = this.up('form');
-						// window.open("php/lib/export_excel_cli_vip_todos.php");
-					}
-				}
-//				,{
-//					text : 'Enviar Promoción',
-//					tabIndex : 21,
-//					disabled:true,
-//					itemId : 'sendPromotion',
-//					handler : function(btn) {
-//						var s = selModel.getSelection();
-//						// And then you can iterate over the selected items,
-//						// e.g.:
-//						selected = [];
-//						Ext.each(s, function(item) {
-//							if(item.data.ema_vip!=null && item.data.ema_vip!="" && !selected.includes(item.data.ema_vip))
-//								selected.push(item.data.ema_vip);
-//						});
-//						console.debug(selected);
-//						modulo = new MyDesktop.EnviaPromociones();
-//						var window = modulo.createWindow(app, selected);
-//						window.show();
-//						// Ext.MessageBox.show({
-//						// title : 'ENVIO DE PROMOCIONES EN DESARROLLO',
-//						// msg : "Enviará correos a
-//						// "+selModel.getSelection().length+" clientes",
-//						// icon : Ext.MessageBox.INFO,
-//						// buttons : Ext.Msg.OK
-//						// });
-//						// formulario = this.up('form').getForm();
-//						// panelForm = this.up('form');
-//						// window.open("php/lib/export_excel_cli_vip_todos.php");
-//					}
-//				}
-				]
+				}]
 			} ]
 		});
 		

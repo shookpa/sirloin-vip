@@ -14,14 +14,31 @@ foreach ( $arrayDatosInsertar [0] as $key => $value ) {
 
 $arrayDatosInsertar2 ["datetime_vip"]=date("Y-m-d H:i:s");
 // var_dump($arrayDatosInsertar2 );
-$resultado = UpdateTable("clientes_vip", $arrayDatosInsertar2,"id");
+$sql="SELECT pto_vip FROM clientes_vip WHERE num_vip ='".$arrayDatosInsertar2["num_vip"]."'";
+$rsd=traedatosmysql($sql);
+$detMov="";
+if($arrayDatosInsertar2["tipoMov"]==1)
+{
+	$arrayDatosInsertar2 ["pto_vip"]=$rsd->fields["pto_vip"]+$arrayDatosInsertar2 ["montoMov"];
+	$detMov="Acumulación de Puntos";
+	
+}
+if($arrayDatosInsertar2["tipoMov"]==2)
+{
+	$arrayDatosInsertar2 ["pto_vip"]=$rsd->fields["pto_vip"]-$arrayDatosInsertar2 ["montoMov"];
+	$detMov="Descuento de Puntos";
+}
+// var_dump($arrayDatosInsertar2);
+
+
+$resultado = UpdateTable("clientes_vip", $arrayDatosInsertar2,"num_vip");
 
 //Aparte de actualizar el saldo, debe generar un movimiento de actualizacion de saldo:
 $arDatMovs["id_restaurante"]=$arrayDatosInsertar2 ["id_restaurante"];
 $arDatMovs["num_vip"]=$arrayDatosInsertar2 ["num_vip"];
 $arDatMovs["fec_vip"]=date("Y-m-d");
-$arDatMovs["det_vip"]="Modificacion de saldo desde Sistema Web";
-$arDatMovs["mon_vip"]=$arrayDatosInsertar2 ["pto_vip"];
+$arDatMovs["det_vip"]=$detMov." desde Sistema Web";
+$arDatMovs["mon_vip"]=$arrayDatosInsertar2 ["montoMov"];
 InsertTable("mov_vip", $arDatMovs,true);
 echo "{'success':true, 'mensaje':'Se actualizo correctamente el saldo del cliente'}";
 

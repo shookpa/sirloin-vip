@@ -75,14 +75,14 @@ Ext.define('MyDesktop.PanelMercadotecnia', {
 						items : [ {
 							iconCls : 'add',
 							text : 'Agregar Promocion',
-							disabled: perm!=null && !perm.some(item => item.id_permiso == '2' && item.per_func5 == "1"),
+							disabled: perm!=null && !perm.some(item => item.id_permiso == '2' && item.per_func4 == "1"),
 							itemId : 'newPromocion',
 							scope : this,
 							handler : this.onNewPromocionClick
 						}, {
 							iconCls : 'remove',
 							text : 'Eliminar Promocion',
-							disabled: perm!=null && !perm.some(item => item.id_permiso == '2' && item.per_func6 == "1"),
+							disabled: perm!=null && !perm.some(item => item.id_permiso == '2' && item.per_func5 == "1"),
 							itemId : 'deletePromocion',
 							scope : this,
 							disabled : true,
@@ -147,7 +147,17 @@ Ext.define('MyDesktop.PanelMercadotecnia', {
 				this.getView().on('collapsebody', this.onCollapseNestedGrid, this);
 			},
 			onSelectChange : function(selModel, selections) {
-				this.down('#deletePromocion').setDisabled(selections.length === 0);
+				if(perm!=null )
+				{
+					if (perm.some(item => item.id_permiso == '2' && item.per_func5 == "1"))
+						this.down('#deletePromocion').setDisabled(selections.length === 0);
+
+				}	
+				else
+				{
+					this.down('#deletePromocion').setDisabled(selections.length === 0);
+				}
+				
 			},
 			onSync : function() {
 				this.store.sync();
@@ -260,7 +270,7 @@ Ext.define('MyDesktop.PanelMercadotecnia', {
 						}, {
 							iconCls : 'remove',
 							text : 'Eliminar Boletin',
-							disabled: perm!=null && !perm.some(item => item.id_permiso == '2' && item.per_func3 == "1"),
+							disabled: perm!=null && !perm.some(item => item.id_permiso == '2' && item.per_func2 == "1"),
 							itemId : 'deleteBoletin',
 							scope : this,
 							disabled : true,
@@ -268,7 +278,7 @@ Ext.define('MyDesktop.PanelMercadotecnia', {
 						}, {
 							iconCls : 'email_go',
 							text : 'Enviar Boletin',
-							disabled: perm!=null && !perm.some(item => item.id_permiso == '2' && item.per_func4 == "1"),
+							disabled: perm!=null && !perm.some(item => item.id_permiso == '2' && item.per_func3 == "1"),
 							itemId : 'sendBoletin',
 							scope : this,
 							handler : this.onSendBoletinClick
@@ -306,7 +316,16 @@ Ext.define('MyDesktop.PanelMercadotecnia', {
 				this.getView().on('collapsebody', this.onCollapseNestedGrid, this);
 			},
 			onSelectChange : function(selModel, selections) {
-				this.down('#deleteBoletin').setDisabled(selections.length === 0);
+				if(perm!=null )
+				{
+					if (perm.some(item => item.id_permiso == '2' && item.per_func2 == "1"))
+						this.down('#deleteBoletin').setDisabled(selections.length === 0);
+
+				}	
+				else
+				{
+					this.down('#deleteBoletin').setDisabled(selections.length === 0);
+				}
 				// this.down('#editClient').setDisabled(selections.length ===
 				// 0);
 				// this.down('#newContact').setDisabled(selections.length ===

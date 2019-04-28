@@ -82,6 +82,7 @@ Ext.define('MyDesktop.ModificarSaldo', {
 		        		xtype: 'textfield',	   
 		        	 	queryMode: 'local',
 		        	 	allowBlank: false,
+		        	 	readOnly:true,
 		        		value: seleccion.pto_vip,
 		        		maskRe: /[0-9.]/,
 		        	 	name: 'saldo',
@@ -89,10 +90,45 @@ Ext.define('MyDesktop.ModificarSaldo', {
 			            tabIndex: 19,
 			            anchor:'100%',
 			            matchFieldWidth: false
+		        },{
+		        	 	fieldLabel: 'Movimiento a realizar',		            
+		        		xtype: 'combobox',	   
+		        	 	queryMode: 'local',
+		        	 	allowBlank: false,
+		        		maskRe: /[0-9.]/,
+		        	 	name: 'tipoMov',
+			            typeAhead: true,
+			            tabIndex: 20,
+			            anchor:'100%',
+			            store : Ext.create('Ext.data.Store', {
+							fields : [ 'campo' ],
+							itemId : 'storeCamposFiltro3',
+							
+							data : [ {
+								"id" : 1,
+								"campo" : "Acumulación de Puntos"
+							}, {
+								"id" : 2,
+								"campo" : "Descuento de Puntos"
+							} ]
+						}),
+						displayField : 'campo',
+						valueField : 'id',
+		        },{
+		        	 	fieldLabel: 'Monto del movimiento',		            
+		        		xtype: 'textfield',	   
+		        	 	queryMode: 'local',
+		        	 	allowBlank: false,
+		        		maskRe: /[0-9.]/,
+		        	 	name: 'montoMov',
+			            typeAhead: true,
+			            tabIndex: 21,
+			            anchor:'100%',
+			            matchFieldWidth: false
 		        }],
 			        buttons: [{
 					    text: 'Guardar',
-					    tabIndex: 21,
+					    tabIndex: 22,
 					    handler: function(btn) {
 					    	formulario = this.up('form').getForm();
 					    	
@@ -100,6 +136,8 @@ Ext.define('MyDesktop.ModificarSaldo', {
 					    	var datosFormulario = [{
 
 		                    	 "pto_vip" :   				panelForm.items.get(0).items.get(0).items.get(2).getValue(),
+		                    	 "tipoMov" :   				panelForm.items.get(0).items.get(0).items.get(3).getValue(),
+		                    	 "montoMov" :   			panelForm.items.get(0).items.get(0).items.get(4).getValue(),
 		                    	 "id" :  				seleccion.id,
 		                    	 "id_restaurante" :  				seleccion.id_restaurante,
 		                    	 "num_vip" :  				seleccion.num_vip
@@ -116,7 +154,7 @@ Ext.define('MyDesktop.ModificarSaldo', {
 			                          url: 'php/saveFormModifyBalance.php',
 			                          success: function(form, action){
 //			                        	  var data = Ext.decode(action.response.responseText);
-			                        	  Ext.getCmp('gridMovimientos').store.load();
+			                        	  Ext.getCmp('gridMovimientos3').store.load();
 			                        	  win.destroy();
 			                        	 
 			                          },
@@ -138,7 +176,7 @@ Ext.define('MyDesktop.ModificarSaldo', {
                 id: 'modificar-saldo',
                 title:'Modificar Saldo',
                 width:550,
-                height:300,
+                height:350,
                 modal:true,
                 draggable:true,
                 iconCls: 'tabs',

@@ -78,6 +78,7 @@ Ext.define('MyDesktop.App', {
 //        'MyDesktop.AdministracionVIP2',
         'MyDesktop.ReportesVIP',
         'MyDesktop.ReportesVIP2',
+        'MyDesktop.AdministracionSaldos',
         'MyDesktop.EnviaPromociones',
         'MyDesktop.CreaUsuarios',
         'MyDesktop.ModificaUsuarios',
@@ -104,27 +105,38 @@ Ext.define('MyDesktop.App', {
     	
         this.callParent();
         this.cargaCombosAplicacion();
+        
         if(sessionStorage.tipoUser=="3")
     	{
         	
       	  	//DESDE AQUI OCULTAMOS LOS MENUS A LOS QUE NO DEBE TENER ACCESO, DEBE ESTAR EN ORDEN DESCENDENTE:
-      	  	if(!perm.some(item => item.id_permiso == '2' && item.per_modulo == "1"))
-    		{
-      		  // Mercadotecnia
-      	  		this.getDesktop().shortcuts.remove( this.getDesktop().shortcuts.getAt(3));
-      	  		this.getDesktop().taskbar.startMenu.menu.remove("launcher-panel-mercadotecnia");
-    		}
+      	  	
+        	
+        	if(!perm.some(item => item.id_permiso == '4' && item.per_modulo == "1"))
+	  		{
+    	  		// administracion de saldos
+    	  		this.getDesktop().shortcuts.remove( this.getDesktop().shortcuts.getAt(4));
+    	  		this.getDesktop().taskbar.startMenu.menu.remove("launcher-panel-administracion-saldos");
+	  		}
+        	if(!perm.some(item => item.id_permiso == '2' && item.per_modulo == "1"))
+	  		{
+	    		  // Mercadotecnia
+	    	  		this.getDesktop().shortcuts.remove( this.getDesktop().shortcuts.getAt(3));
+	    	  		this.getDesktop().taskbar.startMenu.menu.remove("launcher-panel-mercadotecnia");
+	  		}
       	  	if(!perm.some(item => item.id_permiso == '1' && item.per_modulo == "1"))
       	  	{ // Perfiles
     	  		this.getDesktop().shortcuts.remove( this.getDesktop().shortcuts.getAt(2)); 
     	  		this.getDesktop().taskbar.startMenu.menu.remove("launcher-administra-usuarios");
       	  	}
+	      	
       	  	if(!perm.some(item => item.id_permiso == '3' && item.per_modulo == "1"))
     		{
       	  		// Reportes
       	  		this.getDesktop().shortcuts.remove( this.getDesktop().shortcuts.getAt(1));
-      	  		this.getDesktop().taskbar.startMenu.menu.remove("launcher-panel-administracion");
+      	  		this.getDesktop().taskbar.startMenu.menu.remove("launcher-panel-reportes");
     		}
+      	  	
     	}
         
         // now ready...
@@ -132,8 +144,7 @@ Ext.define('MyDesktop.App', {
     
       storeRestaurantes : null,
       storeTiposUsuario : null,
-      storeUbicaciones : null,
-      storeRoles : null,
+      storeUbicaciones : null,      
       storeBoletines : null,
       storeEstados : null,
       storeColonias : null,
@@ -191,13 +202,7 @@ Ext.define('MyDesktop.App', {
                 {name:'descripcion', type:'string'}
             ]
         });
-    	Ext.define('ModelRoles', {
-            extend: 'Ext.data.Model',
-            fields: [
-                {name:'id_rol', type:'int'},              
-                {name:'nombre_rol', type:'string'}
-            ]
-        });
+    	
     	
     	
         this.storeRestaurantes = Ext.create('Ext.data.Store', {
@@ -267,23 +272,7 @@ Ext.define('MyDesktop.App', {
             	filtros: 'WHERE id IN (1,3)'
             }
         });      
-        this.storeRoles = Ext.create('Ext.data.Store', {
-        	model: 'ModelRoles',    
-	        proxy: {	            
-	            type: 'ajax',
-	            url: 'php/cargaCombos.php',		            
-	            reader: {
-	                root: 'datos'
-	            }
-	        }
-        });
-        
-        this.storeRoles.load({
-            params: {
-            	tabla: 'cat_roles',
-            	filtros: 'WHERE status=1'
-            }
-        });      
+              
         
         this.storeBoletines = Ext.create('Ext.data.Store', {
         	model: 'ModelBoletines',    
@@ -433,7 +422,8 @@ Ext.define('MyDesktop.App', {
             
             new MyDesktop.VisualizaStatusSincronizaciones(),
             new MyDesktop.AdministraUsuarios(),
-            new MyDesktop.PanelMercadotecnia()
+            new MyDesktop.PanelMercadotecnia(),
+            new MyDesktop.AdministracionSaldos(),
           
         ];
     },
@@ -460,14 +450,10 @@ Ext.define('MyDesktop.App', {
 // { name: 'Administraci&oacute;n de la P&aacute;gina', iconCls:
 // 'web_management_48', module: 'administra-pagina',id:'icon-administra-pagina'
 // } , //OPCION 3
-                         { name: 'Reportes VIP', iconCls: 'address_card_48', module: 'panel-reportes',id:'icon-panel-reportes' } ,  // OPCION
-																																				// 4
-                         { name: 'Perfiles', iconCls: 'accordion-shortcut', module: 'administra-usuarios',id:'icon-administra-usuarios' } ,  // OPCION
-																																				// 4
-                         { name: 'Mercadotecnia', iconCls: 'mercadotecnia', module: 'panel-mercadotecnia',id:'icon-panel-mercadotecnia' } ,  // OPCION
-																																				// 4
-// { name: 'Bitacora del sistema', iconCls: 'history_48', module:
-// 'visualiza-bitacora',id:'icon-visualiza-bitacora' } //OPCION 5
+                         { name: 'Reportes VIP', iconCls: 'address_card_48', module: 'panel-reportes',id:'icon-panel-reportes' } ,  
+                         { name: 'Perfiles', iconCls: 'accordion-shortcut', module: 'administra-usuarios',id:'icon-administra-usuarios' } , 
+                         { name: 'Mercadotecnia', iconCls: 'mercadotecnia', module: 'panel-mercadotecnia',id:'icon-panel-mercadotecnia' } ,
+                         { name: 'Actualización Saldos', iconCls: 'us_dollar_48', module: 'panel-administracion-saldos',id:'icon-panel-administracion-saldos' } ,
                     
                 ]
             }),

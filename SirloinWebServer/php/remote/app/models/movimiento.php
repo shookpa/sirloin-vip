@@ -137,7 +137,7 @@ class Movimiento extends Model {
 					$condTipoMov = "AND mov_vip.det_vip= 'Registro de tarjeta en sistema web'";
 					break;
 				case 5 :
-					$condTipoMov = "AND mov_vip.det_vip= 'Modificacion de saldo desde Sistema Web'";
+					$condTipoMov = "AND mov_vip.det_vip LIKE '%desde Sistema Web'";
 					break;
 				case 6 :
 					$condTipoMov = "AND mov_vip.det_vip= 'Vencimiento de puntos'";
@@ -163,7 +163,10 @@ class Movimiento extends Model {
 			$condMontoMov = "HAVING sum(mov_vip.mon_vip)  $operMov1 $montoMin AND sum(mov_vip.mon_vip) $operMov2 $montoMax";
 		}
 		if ($_SESSION ["s_tipoUser"] == "3")
-			$condRest .= " AND cat_restaurantes.id_restaurante IN (" . $_SESSION ["s_rest"] . ")";
+			if ($_SESSION ["s_rest"]!="false" && $_SESSION ["s_rest"]!=false)
+				$condRest .= " AND cat_restaurantes.id_restaurante IN (" . $_SESSION ["s_rest"] . ")";
+			else 
+				$condRest .= " AND cat_restaurantes.id_restaurante IN (0)";
 		
 		if (isset ( $_REQUEST ["operUso"] )) {
 			$operUso = $_REQUEST ["operUso"];
@@ -326,7 +329,7 @@ class Movimiento extends Model {
 					$condTipoMov = "AND mov_vip.det_vip= 'Registro de tarjeta en sistema web'";
 					break;
 				case 5 :
-					$condTipoMov = "AND mov_vip.det_vip= 'Modificacion de saldo desde Sistema Web'";
+					$condTipoMov = "AND mov_vip.det_vip LIKE '%desde Sistema Web'";
 					break;
 				case 6 :
 					$condTipoMov = "AND mov_vip.det_vip= 'Vencimiento de puntos'";
@@ -353,7 +356,10 @@ class Movimiento extends Model {
 		}
 		
 		if ($_SESSION ["s_tipoUser"] == "3")
-			$condRest .= " AND cat_restaurantes.id_restaurante IN (" . $_SESSION ["s_rest"] . ")";
+			if ($_SESSION ["s_rest"]!="false" && $_SESSION ["s_rest"]!=false)
+				$condRest .= " AND cat_restaurantes.id_restaurante IN (" . $_SESSION ["s_rest"] . ")";
+			else
+				$condRest .= " AND cat_restaurantes.id_restaurante IN (0)";
 		
 		if (isset ( $_REQUEST ["operUso"] )) {
 			$operUso = $_REQUEST ["operUso"];
