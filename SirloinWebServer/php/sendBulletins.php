@@ -37,8 +37,8 @@ $contEnvios=0;
 $contCorreos=0;
 $contErroneos=0;
 
-$rcpt[0]["name"]="Webmaster Sirloin";
-$rcpt[0]["email"]="jcenteno.ibm@gmail.com";
+// $rcpt[0]["name"]="Webmaster Sirloin";
+// $rcpt[0]["email"]="jcenteno.ibm@gmail.com";
 
 
 foreach ( $correos as $key => $value ) {

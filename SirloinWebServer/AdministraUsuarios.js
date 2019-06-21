@@ -534,7 +534,7 @@ Ext.define('MyDesktop.AdministraUsuarios',
 // property : 'id',
 // direction : 'DESC'
 // } ],
-									autoSync : true,
+									autoSync : false,
 									autoScroll : true,
 									proxy : {
 										type : 'ajax',
@@ -631,6 +631,15 @@ Ext.define('MyDesktop.AdministraUsuarios',
 																					itemId : 'deleteRol',
 																					scope : this,																				
 																					handler : this.onDeleteRolClick
+																				},{
+																					iconCls : 'save',
+																					text : 'Guardar Permisos',
+// disabled: perm!=null && !perm.some(item => item.id_permiso == '1' &&
+// item.per_func12 == "1"),
+																					disabled: perm!=null && !perm.some(item => item.id_permiso == '1' && item.per_func12 == "1"),
+																					itemId : 'savePrivilegesRol',
+																					scope : this,																				
+																					handler : this.onSavePrivilegesRolClick
 																				} ]
 																	}],
 																	columns : [
@@ -741,6 +750,17 @@ Ext.define('MyDesktop.AdministraUsuarios',
 
 																});
 
+											},
+											onSavePrivilegesRolClick : function() {
+													storePermisos.sync();
+													Ext.MessageBox
+													.show({
+														title : 'Permisos almacenados',
+														msg : "Se guardaron los permisos marcados",
+														icon : Ext.MessageBox.INFO,
+														buttons : Ext.Msg.OK
+													});
+			
 											},
 											onNewRolClick : function() {
 												// var selection =
